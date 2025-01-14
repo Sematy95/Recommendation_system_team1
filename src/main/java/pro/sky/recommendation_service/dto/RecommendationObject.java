@@ -5,17 +5,17 @@ import java.util.UUID;
 
 public class RecommendationObject {
 
-    private final String id;
+    private final long id;
     private final String name;
     private final String text;
 
-    public RecommendationObject(String id, String name, String text) {
+    public RecommendationObject(long id, String name, String text) {
         this.id = id;
         this.name = name;
         this.text = text;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
@@ -32,7 +32,7 @@ public class RecommendationObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecommendationObject that = (RecommendationObject) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(text, that.text);
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(text, that.text);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class RecommendationObject {
     @Override
     public String toString() {
         return "RecommendationObject{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", text='" + text + '\'' +
                 '}';
