@@ -5,17 +5,17 @@ import java.util.UUID;
 
 public class RecommendationObject {
 
-    private final long id;
+    private final UUID id;
     private final String name;
     private final String text;
 
-    public RecommendationObject(long id, String name, String text) {
+    public RecommendationObject(UUID id, String name, String text) {
         this.id = id;
         this.name = name;
         this.text = text;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 

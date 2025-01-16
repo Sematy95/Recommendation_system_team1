@@ -18,8 +18,8 @@ public class RecommendationController {
     }
 
     @GetMapping("/GET/recommendation/{user_id}")
-    public RecommendationObject getRecommendation(@PathVariable("user_id") long id) {
-        return new RecommendationObject(id, "Тест", "Тест контроллера");
+    public RecommendationObject getRecommendation(@PathVariable("user_id") String id) {
+        return new RecommendationObject(UUID.fromString(id), "Тест", "Тест контроллера");
     }
 
     @GetMapping("/GET/bd_test/{user_id}")
