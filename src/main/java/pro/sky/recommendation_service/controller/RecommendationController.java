@@ -22,9 +22,4 @@ public class RecommendationController {
         return new RecommendationObject(UUID.fromString(id), "Тест", "Тест контроллера");
     }
 
-    @GetMapping("/GET/bd_test/{user_id}")
-    public Integer test_bd(@PathVariable("user_id") UUID id) {
-        return recommendationsRepository.getRandomTransactionAmount(id);
-
-    }
 }
