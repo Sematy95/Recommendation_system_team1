@@ -6,10 +6,7 @@ import pro.sky.recommendation_service.domain.Transaction;
 import pro.sky.recommendation_service.repository.RecommendationsRepository;
 import pro.sky.recommendation_service.service.RecommendationRuleSet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Component("Invest500RuleSet")
 public class Invest500RuleSet implements RecommendationRuleSet {
@@ -32,9 +29,8 @@ public class Invest500RuleSet implements RecommendationRuleSet {
 
     @Override
     public Optional<RecommendationObject> getRecommendationObject(UUID userId) {
-        // TODO transactions query
+        List<Transaction> transactions = recommendationsRepository.getTransactions(userId);
 
-        List<Transaction> transactions = new ArrayList<>();
         boolean containDebit = false;
         int savingSum = 0;
 
@@ -54,7 +50,7 @@ public class Invest500RuleSet implements RecommendationRuleSet {
 
         }
 
-        if (containDebit == true && savingSum >= 1_000) {
+        if (containDebit && savingSum >= 1_000) {
             return Optional.of(recommendationObject);
         } else {
             return Optional.empty();

@@ -6,10 +6,7 @@ import pro.sky.recommendation_service.domain.Transaction;
 import pro.sky.recommendation_service.repository.RecommendationsRepository;
 import pro.sky.recommendation_service.service.RecommendationRuleSet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Component("SimpleLoanRuleSet")
 public class SimpleLoanRuleSet implements RecommendationRuleSet {
@@ -34,9 +31,8 @@ public class SimpleLoanRuleSet implements RecommendationRuleSet {
 
     @Override
     public Optional<RecommendationObject> getRecommendationObject(UUID userId) {
-        // TODO transactions query
+        List<Transaction> transactions = recommendationsRepository.getTransactions(userId);
 
-        List<Transaction> transactions = new ArrayList<>();
         int debitSpend = 0;
         int debitSum = 0;
 

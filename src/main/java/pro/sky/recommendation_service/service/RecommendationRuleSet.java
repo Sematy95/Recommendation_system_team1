@@ -10,5 +10,4 @@ public interface RecommendationRuleSet {
 
     Optional<RecommendationObject> getRecommendationObject(UUID userId);
 
-
 }
