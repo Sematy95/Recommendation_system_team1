@@ -20,8 +20,8 @@ public class RecommendationController {
         this.recommendationService = recommendationService;
     }
 
-    @GetMapping("/GET/recommendation/{user_id}")
-    public List<RecommendationObject> getRecommendation(@PathVariable("user_id") String id) {
-        return recommendationService.getRecommendations(UUID.fromString(id));
+    @GetMapping("/recommendation/{user_id}")
+    public List<RecommendationObject> getRecommendation(@PathVariable("user_id") UUID id) {
+        return recommendationService.getRecommendations(id);
     }
 }

@@ -14,21 +14,16 @@ import java.util.stream.Collectors;
 @Service
 public class RecommendationService {
 
-    private final List<RecommendationRuleSet> recommendationRuleSets;
+    private final Map<String, RecommendationRuleSet> recommendationRuleSets;
 
-    public RecommendationService(@Qualifier("Invest500RuleSet") Invest500RuleSet invest500RuleSet,
-                                 @Qualifier("SimpleLoanRuleSet") SimpleLoanRuleSet simpleLoanRuleSet,
-                                 @Qualifier("TopSavingRuleSet")TopSavingRuleSet topSavingRuleSet) {
-        recommendationRuleSets = new ArrayList<>();
-        recommendationRuleSets.add(invest500RuleSet);
-        recommendationRuleSets.add(simpleLoanRuleSet);
-        recommendationRuleSets.add(topSavingRuleSet);
+    public RecommendationService(Map<String, RecommendationRuleSet> recommendationRuleSetMap) {
+        recommendationRuleSets = new HashMap<>(recommendationRuleSetMap);
     }
 
     public List<RecommendationObject> getRecommendations(UUID user_id) {
 
         List<RecommendationObject> recommendationObjects = new ArrayList<>();
-        for (RecommendationRuleSet recommendationRuleSet : recommendationRuleSets) {
+        for (RecommendationRuleSet recommendationRuleSet : recommendationRuleSets.values()) {
             if (recommendationRuleSet.getRecommendationObject(user_id).isPresent()) {
                 recommendationObjects.add(recommendationRuleSet.getRecommendationObject(user_id).get());
             }
