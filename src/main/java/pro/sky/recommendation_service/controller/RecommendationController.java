@@ -1,8 +1,8 @@
 package pro.sky.recommendation_service.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import pro.sky.recommendation_service.domain.Rule;
 import pro.sky.recommendation_service.domain.Transaction;
 import pro.sky.recommendation_service.dto.RecommendationObject;
 import pro.sky.recommendation_service.repository.RecommendationsRepository;
@@ -24,4 +24,16 @@ public class RecommendationController {
     public List<RecommendationObject> getRecommendation(@PathVariable("user_id") UUID id) {
         return recommendationService.getRecommendations(id);
     }
+
+    @PostMapping("/rule")
+    public void addRule(@RequestParam("product_name") String productName,
+                        @RequestParam("product_id") UUID productId,
+                        @RequestParam("product_text") String productText,
+                        @RequestParam("rule") Rule rule) {}
+
+    @DeleteMapping("/rule/{rule_id}")
+    public void deleteRule(@PathVariable("rule_id") UUID id) {}
+
+    @GetMapping("/rule")
+    public void getAllRules() {}
 }
