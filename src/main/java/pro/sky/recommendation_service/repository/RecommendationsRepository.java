@@ -23,7 +23,9 @@ public class RecommendationsRepository {
                         "FROM transactions t " +
                         "LEFT JOIN products p ON t.product_id = p.id " +
                         "WHERE t.user_id = ?",
-                (rs, rowNum) -> new Transaction(rs.getString("transaction_type"), rs.getString("product_type"), rs.getInt("amount")),
+                (rs, rowNum) -> new Transaction(rs.getString("transaction_type"),
+                        rs.getString("product_type"),
+                        rs.getInt("amount")),
                 user_ID);
     }
 }

@@ -6,8 +6,10 @@ import pro.sky.recommendation_service.domain.Rule;
 import pro.sky.recommendation_service.domain.Transaction;
 import pro.sky.recommendation_service.dto.RecommendationObject;
 import pro.sky.recommendation_service.repository.RecommendationsRepository;
+import pro.sky.recommendation_service.repository.RuleRepository;
 import pro.sky.recommendation_service.service.RecommendationService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,8 +18,11 @@ public class RecommendationController {
 
     private final RecommendationService recommendationService;
 
-    public RecommendationController(RecommendationService recommendationService) {
+    private final RuleRepository ruleRepository;
+
+    public RecommendationController(RecommendationService recommendationService, RuleRepository ruleRepository) {
         this.recommendationService = recommendationService;
+        this.ruleRepository = ruleRepository;
     }
 
     @GetMapping("/recommendation/{user_id}")
@@ -36,4 +41,5 @@ public class RecommendationController {
 
     @GetMapping("/rule")
     public void getAllRules() {}
+
 }
