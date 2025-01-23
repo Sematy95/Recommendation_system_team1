@@ -3,18 +3,12 @@ package pro.sky.recommendation_service.repository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import pro.sky.recommendation_service.domain.Rule;
-import pro.sky.recommendation_service.domain.Transaction;
+import pro.sky.recommendation_service.domain.RequestObject;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 @Repository
-public class RuleRepository {
+public class RuleRepository  {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -22,12 +16,12 @@ public class RuleRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void addRule(Rule rule) {
+    public void addRule(RequestObject requestObject) {
         jdbcTemplate.update("INSERT INTO rules (id, query, arguments, negate) VALUES (?, ?, ?, ?)",
                 UUID.randomUUID(),
-                rule.getQuery(),
-                rule.getArguments().toArray(new String[rule.getArguments().size()]),
-                rule.isNegate());
+                requestObject.getQuery(),
+                requestObject.getArguments().toArray(new String[requestObject.getArguments().size()]),
+                requestObject.isNegate());
     }
 
     public void deleteRule(UUID id) {

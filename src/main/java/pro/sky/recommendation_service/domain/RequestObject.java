@@ -1,19 +1,31 @@
 package pro.sky.recommendation_service.domain;
 
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
-public class Rule {
+@Entity
+public class RequestObject {
+
+    @Id
+    @GeneratedValue
+    private UUID id;
 
     private String query;
-    private List<String> arguments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "requestObject")
+    private List<Argument> arguments = new ArrayList<>();
+
     private boolean negate;
 
-    public Rule() {
+
+    public RequestObject() {
     }
 
-    public Rule(String query, List<String> arguments, boolean negate) {
+    public RequestObject(String query, List<Argument> arguments, boolean negate) {
         this.query = query;
         this.arguments = arguments;
         this.negate = negate;
@@ -27,11 +39,11 @@ public class Rule {
         this.query = query;
     }
 
-    public List<String> getArguments() {
+    public List<Argument> getArguments() {
         return arguments;
     }
 
-    public void setArguments(List<String> arguments) {
+    public void setArguments(List<Argument> arguments) {
         this.arguments = arguments;
     }
 
@@ -47,8 +59,8 @@ public class Rule {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Rule rule = (Rule) o;
-        return negate == rule.negate && Objects.equals(query, rule.query) && Objects.equals(arguments, rule.arguments);
+        RequestObject requestObject = (RequestObject) o;
+        return negate == requestObject.negate && Objects.equals(query, requestObject.query) && Objects.equals(arguments, requestObject.arguments);
     }
 
     @Override
@@ -63,5 +75,13 @@ public class Rule {
                 ", arguments=" + arguments +
                 ", negate=" + negate +
                 '}';
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }
