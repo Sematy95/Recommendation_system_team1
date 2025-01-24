@@ -5,6 +5,6 @@ import pro.sky.recommendation_service.domain.RequestObject;
 
 import java.util.UUID;
 
-public interface RuleRepositoryJPA extends JpaRepository<RequestObject, UUID> {
+public interface RequestObjectRepository extends JpaRepository<RequestObject, Long> {
 
 }

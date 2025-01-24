@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table (name="request_object")
@@ -12,7 +11,7 @@ public class RequestObject {
 
     @Id
     @GeneratedValue
-    private UUID id;
+    private long id;
 
     private String query;
 
@@ -76,11 +75,11 @@ public class RequestObject {
                 '}';
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 }
