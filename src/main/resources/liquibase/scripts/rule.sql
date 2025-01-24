@@ -1,16 +1,17 @@
 -- liquibase formatted sql
 
 -- changeset dmitri:1
-CREATE TABLE requestObject (
+CREATE TABLE request_object (
     id UUID PRIMARY KEY NOT NULL,
     query TEXT NOT NULL,
-    arguments TEXT[] NOT NULL,
+    request_object_arguments TEXT[] NOT NULL,
     negate BOOLEAN NOT NULL
 )
-
--- changeset sematy95:2
-CREATE TABLE argument (
-id BIGSERIAL PRIMARY KEY NOT NULL,
-rule_id UUID)
+-- changeset sematy:2
+CREATE TABLE request_object_argument (
+id bigserial PRIMARY KEY NOT NULL,
+argument TEXT NOT NULL,
+request_object_id UUID not null
+)
 
 
