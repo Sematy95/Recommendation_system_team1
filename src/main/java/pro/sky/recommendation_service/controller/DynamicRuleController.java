@@ -1,19 +1,27 @@
 package pro.sky.recommendation_service.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import org.apache.tomcat.util.digester.Rule;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.recommendation_service.domain.Condition;
+import pro.sky.recommendation_service.domain.DynamicRule;
+import pro.sky.recommendation_service.service.DynamicRuleService;
 
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/rule")
 public class DynamicRuleController {
 
-    @PostMapping("/rule")
-    public String addRule(@RequestParam("product_name") String productName,
-                        @RequestParam("product_id") UUID productId,
-                        @RequestParam("product_text") String productText,
-                        @RequestParam("condition") Condition condition) {
-        return "controller test add rule";
+    private final DynamicRuleService dynamicRuleService;
+
+    public DynamicRuleController(DynamicRuleService dynamicRuleService) {
+        this.dynamicRuleService = dynamicRuleService;
+    }
+    @Operation(summary = "Add new rule")
+    @PostMapping
+    public DynamicRule addRule(@RequestBody DynamicRule dynamicRule) {
+        return  dynamicRuleService.addRule()
     }
 
     @DeleteMapping("/rule/{rule_id}")
