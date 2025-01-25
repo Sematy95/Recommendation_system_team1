@@ -1,7 +1,6 @@
 package pro.sky.recommendation_service.domain;
 
 import jakarta.persistence.*;
-import pro.sky.recommendation_service.dto.RecommendationObject;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,16 +17,16 @@ public class DynamicRule {
     private UUID product_id;
     private String product_text;
     @ManyToMany
-    private List<RequestObject> rule;
+    private List<Condition> conditions;
 
     public DynamicRule() {
     }
 
-    public DynamicRule(String product_name, UUID product_id, String product_text, List<RequestObject> rule) {
+    public DynamicRule(String product_name, UUID product_id, String product_text, List<Condition> conditions) {
         this.product_name = product_name;
         this.product_id = product_id;
         this.product_text = product_text;
-        this.rule = rule;
+        this.conditions = conditions;
     }
 
     public Long getId() {
@@ -62,12 +61,12 @@ public class DynamicRule {
         this.product_text = product_text;
     }
 
-    public List<RequestObject> getRule() {
-        return rule;
+    public List<Condition> getConditions() {
+        return conditions;
     }
 
-    public void setRule(List<RequestObject> rule) {
-        this.rule = rule;
+    public void setConditions(List<Condition> rule) {
+        this.conditions = rule;
     }
 
     @Override
@@ -75,12 +74,12 @@ public class DynamicRule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DynamicRule that = (DynamicRule) o;
-        return Objects.equals(id, that.id) && Objects.equals(product_name, that.product_name) && Objects.equals(product_id, that.product_id) && Objects.equals(product_text, that.product_text) && Objects.equals(rule, that.rule);
+        return Objects.equals(id, that.id) && Objects.equals(product_name, that.product_name) && Objects.equals(product_id, that.product_id) && Objects.equals(product_text, that.product_text) && Objects.equals(conditions, that.conditions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, product_name, product_id, product_text, rule);
+        return Objects.hash(id, product_name, product_id, product_text, conditions);
     }
 
     @Override
@@ -90,7 +89,7 @@ public class DynamicRule {
                 ", product_name='" + product_name + '\'' +
                 ", product_id=" + product_id +
                 ", product_text='" + product_text + '\'' +
-                ", recommendationsObjects=" + rule +
+                ", recommendationsObjects=" + conditions +
                 '}';
     }
 }

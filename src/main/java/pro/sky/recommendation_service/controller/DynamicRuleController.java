@@ -1,7 +1,7 @@
 package pro.sky.recommendation_service.controller;
 
 import org.springframework.web.bind.annotation.*;
-import pro.sky.recommendation_service.domain.RequestObject;
+import pro.sky.recommendation_service.domain.Condition;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ public class DynamicRuleController {
     public String addRule(@RequestParam("product_name") String productName,
                         @RequestParam("product_id") UUID productId,
                         @RequestParam("product_text") String productText,
-                        @RequestParam("requestObject") RequestObject requestObject) {
+                        @RequestParam("condition") Condition condition) {
         return "controller test add rule";
     }
 

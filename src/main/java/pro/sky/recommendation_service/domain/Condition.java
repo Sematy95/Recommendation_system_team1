@@ -2,12 +2,11 @@ package pro.sky.recommendation_service.domain;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table (name="request_object")
-public class RequestObject {
+@Table(name = "condition")
+public class Condition {
 
     @Id
     @GeneratedValue
@@ -15,17 +14,17 @@ public class RequestObject {
 
     private String query;
 
-
-    private List<String> requestObjectArguments;
+    @OneToOne
+    private Arguments arguments;
     private boolean negate;
 
 
-    public RequestObject() {
+    public Condition() {
     }
 
-    public RequestObject(String query, List<String> requestObjectArguments, boolean negate) {
+    public Condition(String query, Arguments arguments, boolean negate) {
         this.query = query;
-        this.requestObjectArguments = requestObjectArguments;
+        this.arguments = arguments;
         this.negate = negate;
     }
 
@@ -37,12 +36,12 @@ public class RequestObject {
         this.query = query;
     }
 
-    public List<String> getArguments() {
-        return requestObjectArguments;
+    public Arguments arguments() {
+        return arguments;
     }
 
-    public void setArguments(List<String> requestObjectArguments) {
-        this.requestObjectArguments = requestObjectArguments;
+    public void setArguments(Arguments arguments) {
+        this.arguments = arguments;
     }
 
     public boolean isNegate() {
@@ -57,20 +56,20 @@ public class RequestObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RequestObject requestObject = (RequestObject) o;
-        return negate == requestObject.negate && Objects.equals(query, requestObject.query) && Objects.equals(requestObjectArguments, requestObject.requestObjectArguments);
+        Condition condition = (Condition) o;
+        return negate == condition.negate && Objects.equals(query, condition.query) && Objects.equals(requestObjectArguments, condition.requestObjectArguments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(query, requestObjectArguments, negate);
+        return Objects.hash(query, arguments, negate);
     }
 
     @Override
     public String toString() {
         return "Rule{" +
                 "query='" + query + '\'' +
-                ", arguments=" + requestObjectArguments +
+                ", arguments=" + arguments +
                 ", negate=" + negate +
                 '}';
     }

@@ -4,7 +4,7 @@ package pro.sky.recommendation_service.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import pro.sky.recommendation_service.domain.RequestObject;
+import pro.sky.recommendation_service.domain.Condition;
 import pro.sky.recommendation_service.repository.RuleRepository;
 
 
@@ -19,10 +19,10 @@ public class DynamicRuleService {
 
     private static final Logger log = LoggerFactory.getLogger(DynamicRuleService.class);
 
-    public RequestObject addRule(RequestObject requestObject) {
+    public Condition addRule(Condition condition) {
         log.info("Was invoked method for adding student");
-        ruleRepository.addRule(requestObject);
-        return requestObject;
+        ruleRepository.addRule(condition);
+        return condition;
     }
 
 
