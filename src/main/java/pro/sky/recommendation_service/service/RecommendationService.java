@@ -23,16 +23,20 @@ public class RecommendationService {
         recommendationRuleSets = new HashMap<>(recommendationRuleSetMap);
     }
 
-    @Cacheable
+    @Cacheable(value = "recommendationCache")
     public List<RecommendationObject> getRecommendations(UUID user_id) {
 
-        List<RecommendationObject> recommendationObjects = new ArrayList<>();
-        for (RecommendationRuleSet recommendationRuleSet : recommendationRuleSets.values()) {
-            if (recommendationRuleSet.getRecommendationObject(user_id).isPresent()) {
-                recommendationObjects.add(recommendationRuleSet.getRecommendationObject(user_id).get());
-            }
-        }
-
-        return recommendationObjects;
+//        List<RecommendationObject> recommendationObjects = new ArrayList<>();
+//        for (RecommendationRuleSet recommendationRuleSet : recommendationRuleSets.values()) {
+//            if (recommendationRuleSet.getRecommendationObject(user_id).isPresent()) {
+//                recommendationObjects.add(recommendationRuleSet.getRecommendationObject(user_id).get());
+//            }
+//        }
+//
+//        return recommendationObjects;
+        return recommendationRuleSets.values().stream()
+                .filter(ruleSet -> ruleSet.getRecommendationObject(user_id).isPresent())
+                .map(ruleSet -> ruleSet.getRecommendationObject(user_id).get())
+                .collect(Collectors.toList());
     }
 }
