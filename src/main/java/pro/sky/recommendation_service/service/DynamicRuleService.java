@@ -24,12 +24,19 @@ public class DynamicRuleService {
     private static final Logger log = LoggerFactory.getLogger(DynamicRuleService.class);
 
     public DynamicRule addRule(DynamicRule dynamicRule) {
-        log.info("Was invoked method for adding dynamic rule");
+        log.info("Was invoked method for adding dynamic rule id={} with product name - {} ", dynamicRule.getId(), dynamicRule.getProduct_name());
         return dynamicRuleRepository.save(dynamicRule);
     }
     public void deleteRule(long id) {
-        log.info("Was invoked method for removing dynamic rule");
-        dynamicRuleRepository.deleteById(id);
+        try {
+            DynamicRule dynamicRuleForDelete = dynamicRuleRepository.findById(id).orElseThrow(() -> new RuntimeException("Could not find dynamic rule with id=" + id));
+            dynamicRuleRepository.delete(dynamicRuleForDelete);
+            log.info("Was invoked method for removing dynamic rule with id={} ", dynamicRuleForDelete.getId());
+
+        }catch (RuntimeException e) {
+            log.error("Could not find dynamic rule with id=" + id, e);
+            throw e;
+        }
     }
     public Collection<DynamicRule> getAllDynamicRules() {
         return dynamicRuleRepository.findAll();

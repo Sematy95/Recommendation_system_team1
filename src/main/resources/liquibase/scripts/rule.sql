@@ -31,3 +31,5 @@ CREATE TABLE IF NOT EXISTS dynamic_rule_conditions (
 
 
 
+                             )
+
