@@ -9,7 +9,8 @@ import java.util.Objects;
 public class Condition {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "condition_seq")
+    @SequenceGenerator(name = "condition_seq", allocationSize = 1)
     private long id;
 
     private String query;
@@ -28,6 +29,14 @@ public class Condition {
         this.negate = negate;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getQuery() {
         return query;
     }
@@ -36,7 +45,7 @@ public class Condition {
         this.query = query;
     }
 
-    public Arguments arguments() {
+    public Arguments getArguments() {
         return arguments;
     }
 
@@ -57,28 +66,21 @@ public class Condition {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Condition condition = (Condition) o;
-        return negate == condition.negate && Objects.equals(query, condition.query) && Objects.equals(requestObjectArguments, condition.requestObjectArguments);
+        return id == condition.id && negate == condition.negate && Objects.equals(query, condition.query) && Objects.equals(arguments, condition.arguments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(query, arguments, negate);
+        return Objects.hash(id, query, arguments, negate);
     }
 
     @Override
     public String toString() {
-        return "Rule{" +
-                "query='" + query + '\'' +
+        return "Condition{" +
+                "id=" + id +
+                ", query='" + query + '\'' +
                 ", arguments=" + arguments +
                 ", negate=" + negate +
                 '}';
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
-        return id;
     }
 }

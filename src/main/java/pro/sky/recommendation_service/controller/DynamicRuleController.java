@@ -21,7 +21,7 @@ public class DynamicRuleController {
     @Operation(summary = "Add new rule")
     @PostMapping
     public DynamicRule addRule(@RequestBody DynamicRule dynamicRule) {
-        return  dynamicRuleService.addRule()
+        return dynamicRuleService.addRule(dynamicRule);
     }
 
     @DeleteMapping("/rule/{rule_id}")

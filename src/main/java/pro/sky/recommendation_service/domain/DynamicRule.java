@@ -10,7 +10,8 @@ import java.util.UUID;
 @Table(name="dynamic_rule")
 public class DynamicRule {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dynamic_rule_seq")
+    @SequenceGenerator(name = "dynamic_rule_seq", allocationSize = 1)
     private Long id;
 
     private String product_name;

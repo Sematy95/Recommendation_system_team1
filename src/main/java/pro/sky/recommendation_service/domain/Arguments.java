@@ -1,9 +1,6 @@
 package pro.sky.recommendation_service.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -12,7 +9,8 @@ import java.util.Objects;
 public class Arguments {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arguments_seq")
+    @SequenceGenerator(name = "arguments_seq", allocationSize = 1)
     private Long id;
 
     private String productType;
