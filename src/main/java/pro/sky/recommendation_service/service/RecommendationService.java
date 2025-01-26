@@ -1,6 +1,9 @@
 package pro.sky.recommendation_service.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.stereotype.Service;
 import pro.sky.recommendation_service.dto.RecommendationObject;
@@ -20,6 +23,7 @@ public class RecommendationService {
         recommendationRuleSets = new HashMap<>(recommendationRuleSetMap);
     }
 
+    @Cacheable
     public List<RecommendationObject> getRecommendations(UUID user_id) {
 
         List<RecommendationObject> recommendationObjects = new ArrayList<>();
