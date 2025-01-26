@@ -16,13 +16,13 @@ public class RuleRepository  {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void addRule(Condition condition) {
-        jdbcTemplate.update("INSERT INTO rules (id, query, arguments, negate) VALUES (?, ?, ?, ?)",
-                UUID.randomUUID(),
-                condition.getQuery(),
-                condition.getArguments().toArray(new String[condition.getArguments().size()]),
-                condition.isNegate());
-    }
+//    public void addRule(Condition condition) {
+//        jdbcTemplate.update("INSERT INTO rules (id, query, arguments, negate) VALUES (?, ?, ?, ?)",
+//                UUID.randomUUID(),
+//                condition.getQuery(),
+//                condition.getArguments().toArray(new String[condition.getArguments().size()]),
+//                condition.isNegate());
+//    }
 
     public void deleteRule(UUID id) {
         jdbcTemplate.update("DELETE FROM rules WHERE id = ?",

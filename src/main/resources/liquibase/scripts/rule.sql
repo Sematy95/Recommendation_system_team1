@@ -1,17 +1,33 @@
 -- liquibase formatted sql
 
 -- changeset dmitri:1
-CREATE TABLE request_object (
-    id UUID PRIMARY KEY NOT NULL,
+create sequence arguments_seq start with 1 increment by 1;
+create sequence condition_seq start with 1 increment by 1;
+create sequence dynamic_rule_seq start with 1 increment by 1;
+CREATE TABLE IF NOT EXISTS dynamic_rule  (
+    id BIGINT PRIMARY KEY NOT NULL,
+    product_name TEXT NOT NULL,
+    product_id UUID NOT NULL,
+    product_text TEXT NOT NULL,
+    conditions varchar(255) array);
+
+CREATE TABLE IF NOT EXISTS condition (
+    id BIGINT PRIMARY KEY NOT NULL,
     query TEXT NOT NULL,
-    request_object_arguments TEXT[] NOT NULL,
-    negate BOOLEAN NOT NULL
-)
--- changeset sematy:2
-CREATE TABLE request_object_argument (
-id bigserial PRIMARY KEY NOT NULL,
-argument TEXT NOT NULL,
-request_object_id UUID not null
-)
+    arguments_id BIGINT NOT NULL,
+    negate BOOLEAN NOT NULL);
+
+CREATE TABLE IF NOT EXISTS arguments (
+  id BIGINT PRIMARY KEY NOT NULL,
+  product_Type TEXT,
+  transaction_Name TEXT,
+  compare_Type TEXT,
+  compare_Value TEXT);
+
+CREATE TABLE IF NOT EXISTS dynamic_rule_conditions (
+  dynamic_rule_id BIGINT NOT NULL,
+  conditions_id BIGINT NOT NULL
+);
+
 
 
