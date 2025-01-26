@@ -1,5 +1,6 @@
 package pro.sky.recommendation_service.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class DynamicRule {
     private String product_name;
     private UUID product_id;
     private String product_text;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Condition> conditions;
 
     public DynamicRule() {

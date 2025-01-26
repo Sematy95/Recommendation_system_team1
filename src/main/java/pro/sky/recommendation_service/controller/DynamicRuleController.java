@@ -35,7 +35,7 @@ public class DynamicRuleController {
 
     }
 
-    @GetMapping("/rule")
+    @GetMapping
     public Collection<DynamicRule> getAllRules() {
         return dynamicRuleService.getAllDynamicRules();
     }

@@ -4,3 +4,6 @@ SELECT t.type as transaction_type, p.type as product_type, t.amount FROM transac
 2025-01-23 21:24:30.406685+03:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTIONS" not found (this database is empty); SQL statement:
 SELECT t.type as transaction_type, p.type as product_type, t.amount FROM transactions t LEFT JOIN products p ON t.product_id = p.id WHERE t.user_id = ? [42104-232]
+2025-01-26 19:57:13.613182+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TRANSACTIONS" not found (this database is empty); SQL statement:
+SELECT t.type as transaction_type, p.type as product_type, t.amount FROM transactions t LEFT JOIN products p ON t.product_id = p.id WHERE t.user_id = ? [42104-232]
