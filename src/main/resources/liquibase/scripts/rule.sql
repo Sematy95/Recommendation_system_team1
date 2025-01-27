@@ -5,67 +5,33 @@ create sequence IF NOT EXISTS arguments_seq start with 1 increment by 1;
 create sequence IF NOT EXISTS condition_seq start with 1 increment by 1;
 create sequence IF NOT EXISTS dynamic_rule_seq start with 1 increment by 1;
 CREATE TABLE IF NOT EXISTS dynamic_rule
-(
-    id
-    BIGINT
-    PRIMARY
-    KEY
-    NOT
-    NULL,
-    product_name
-    TEXT
-    NOT
-    NULL,
-    product_id
-    UUID
-    NOT
-    NULL,
-    product_text
-    TEXT
-    NOT
-    NULL
+(   id BIGINT PRIMARY KEY NOT NULL,
+    product_name TEXT NOT NULL,
+    product_id UUID NOT NULL,
+    product_text TEXT NOT NULL
 );
 
 
 CREATE TABLE IF NOT EXISTS condition
-(
-    id
-    BIGINT
-    PRIMARY
-    KEY
-    NOT
-    NULL,
-    query
-    TEXT
-    NOT
-    NULL,
-    product_Type
-    TEXT
-    NOT
-    NULL,
-    transaction_Name
-    TEXT,
-    compare_Type
-    TEXT,
-    compare_Value
-    BIGINT,
-    negate
-    BOOLEAN
-    NOT
-    NULL
+(   id BIGINT PRIMARY KEY NOT NULL,
+    query BIGINT NOT NULL,
+    product_Type TEXT NOT NULL,
+    transaction_Name TEXT,
+    compare_Type TEXT,
+    compare_Value BIGINT,
+    negate BOOLEAN NOT NULL,
+    parallel_Condition_Id BIGINT,
+    CONSTRAINT condition_id foreign key (parallel_condition_id) references condition(id)
 );
 
 
 CREATE TABLE IF NOT EXISTS dynamic_rule_conditions
 (
-    dynamic_rule_id
-    BIGINT
-    NOT
-    NULL,
-    conditions_id
-    BIGINT
-    NOT
-    NULL
+    conditions_id BIGINT NOT NULL,
+    dynamic_rule_id BIGINT NOT NULL,
+    CONSTRAINT dynamic_rule_conditions_dynamic_rule_id foreign key (dynamic_rule_id) references dynamic_rule,
+    CONSTRAINT dynamic_rule_conditions_conditions_id foreign key (conditions_id) references condition
+
 );
 
 -- changeset sematy:2
@@ -87,21 +53,25 @@ VALUES (1, 'Invest 500', '147f6a0f-3b91-413b-ab99-87f081d60d5a',
 Не упустите возможность воспользоваться выгодными условиями кредитования от нашей компании!');
 
 -- changeset sematy:3
-INSERT INTO condition (id, query, product_Type, transaction_Name, compare_Type, compare_Value, negate) VALUES
-(1, 'USER_OF', 'INVEST', NULL, NULL, NULL, TRUE),
-(2, 'TRANSACTION_SUM_COMPARE', 'SAVING', 'DEPOSIT', '>=', 1000, FALSE),
-(3, 'USER_OF', 'DEBIT', NULL, NULL, NULL, FALSE),
-(4, 'TRANSACTION_SUM_COMPARE', 'DEBIT', 'DEPOSIT', '>=', 50000, false),
-(5, 'TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW', 'DEBIT', null, '>', null, false),
-(6, 'USER_OF', 'CREDIT', null, null, null,true),
-(7, 'TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW', 'DEBIT', null, '>', null, false),
-(8, 'TRANSACTION_SUM_COMPARE', 'DEBIT', 'DEPOSIT', '>', 100000, false);
+INSERT INTO condition (id, query, product_Type, transaction_Name, compare_Type, compare_Value, negate,parallel_condition_id) VALUES
+(1, 0, 'INVEST', NULL, NULL, NULL, TRUE,NULL),
+(2, 2, 'SAVING', 'DEPOSIT', '>=', 1000, FALSE,null),
+(3, 0, 'DEBIT', NULL, NULL, NULL, FALSE,NULL),
+
+(4, 2, 'DEBIT', 'DEPOSIT', '>=', 50000, false,NULL),
+(5,2,'SAVING','DEPOSIT','>=',50000,FALSE,4),
+(6, 3, 'DEBIT', null, '>', null, false,NULL),
+
+(7, 0, 'CREDIT', null, null, null,true,NULL),
+(8, 3, 'DEBIT', null, '>', null, false,NULL),
+(9, 3, 'DEBIT', 'WITHDRAW', '>', 100000, false,NULL);
 
 -- changeset sematy:4
 INSERT INTO dynamic_rule_conditions (dynamic_rule_id, conditions_id) VALUES
 (1,1),(1,2),(1,3),
 (2,4),(2,5),(2,6),
 (3,6),(3,7),(3,8);
+
 
 
 

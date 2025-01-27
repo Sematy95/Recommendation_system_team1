@@ -18,9 +18,6 @@ public class RecommendationsRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private String CreateSqlFromCondition(Condition condition) {
-        return "sql";
-    }
 
     public List<Transaction> getTransactions(UUID user_ID) {
         return jdbcTemplate.query(

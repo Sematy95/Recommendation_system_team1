@@ -2,6 +2,7 @@ package pro.sky.recommendation_service.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import pro.sky.recommendation_service.domain.enums.QueryType;
 
 import java.util.Objects;
 
@@ -15,24 +16,26 @@ public class Condition {
     @JsonIgnore
     private long id;
 
-    private String query;
+    private QueryType query;
     private String productType;
     private String transactionName;
     private String compareType;
     private Integer compareValue;
     private boolean negate;
+    private Long parallelConditionId;
 
 
     public Condition() {
     }
 
-    public Condition(String query, String productType, String transactionName, String compareType, Integer compareValue, boolean negate) {
+    public Condition(QueryType query, String productType, String transactionName, String compareType, Integer compareValue, boolean negate, Long parallelConditionId) {
         this.query = query;
         this.productType = productType;
         this.transactionName = transactionName;
         this.compareType = compareType;
         this.compareValue = compareValue;
         this.negate = negate;
+        this.parallelConditionId = parallelConditionId;
     }
 
     public long getId() {
@@ -43,11 +46,11 @@ public class Condition {
         this.id = id;
     }
 
-    public String getQuery() {
+    public QueryType getQuery() {
         return query;
     }
 
-    public void setQuery(String query) {
+    public void setQuery(QueryType query) {
         this.query = query;
     }
 
@@ -91,12 +94,20 @@ public class Condition {
         this.negate = negate;
     }
 
+    public Long getParallelConditionId() {
+        return parallelConditionId;
+    }
+
+    public void setParallelConditionId(Long parallelConditionId) {
+        this.parallelConditionId = parallelConditionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Condition condition = (Condition) o;
-        return negate == condition.negate && Objects.equals(query, condition.query) && Objects.equals(productType, condition.productType) && Objects.equals(transactionName, condition.transactionName) && Objects.equals(compareType, condition.compareType) && Objects.equals(compareValue, condition.compareValue);
+        return negate == condition.negate && Objects.equals(query, condition.query) && Objects.equals(productType, condition.productType) && Objects.equals(transactionName, condition.transactionName) && Objects.equals(compareType, condition.compareType) && Objects.equals(compareValue, condition.compareValue) ;
     }
 
     @Override
@@ -114,6 +125,7 @@ public class Condition {
                 ", compareType='" + compareType + '\'' +
                 ", compareValue=" + compareValue +
                 ", negate=" + negate +
+                ", parallelConditionId=" + parallelConditionId +
                 '}';
     }
 }
