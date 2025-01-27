@@ -30,7 +30,7 @@ public class RecommendationService {
 
     private final Map<String, RecommendationRuleSet> recommendationRuleSets;
 
-    public RecommendationService( DynamicRuleService dynamicRuleService, ConditionsRepository conditionsRepository, Map<String, RecommendationRuleSet> recommendationRuleSets) {
+    public RecommendationService(DynamicRuleService dynamicRuleService, ConditionsRepository conditionsRepository, Map<String, RecommendationRuleSet> recommendationRuleSets) {
 
         this.dynamicRuleService = dynamicRuleService;
         this.conditionsRepository = conditionsRepository;
@@ -60,7 +60,7 @@ public class RecommendationService {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT CASE WHEN ").append(condition.isNegate() ? "NOT " : "").append("EXISTS (");
         switch (condition.getQuery()) {
-            case USER_OF,ACTIVE_USER_OF -> sql.append("SELECT * FROM CTE WHERE PRODUCT_TYPE = '")
+            case USER_OF, ACTIVE_USER_OF -> sql.append("SELECT * FROM CTE WHERE PRODUCT_TYPE = '")
                     .append(condition.getProductType())
                     .append("' LIMIT 1");
             case TRANSACTION_SUM_COMPARE ->
@@ -85,6 +85,5 @@ public class RecommendationService {
         return sql.toString();
 
 
-
-}
+    }
 }
