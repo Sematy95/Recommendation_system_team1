@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface RecommendationRuleSet {
-
+    // Get recommendationObject by userId
     Optional<RecommendationObject> getRecommendationObject(UUID userId);
-
 }

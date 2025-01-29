@@ -11,6 +11,7 @@ import pro.sky.recommendation_service.service.impl.TopSavingRuleSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// A service for getting recommendations for users based on a set of rules
 @Service
 public class RecommendationService {
 
@@ -20,6 +21,14 @@ public class RecommendationService {
         recommendationRuleSets = new HashMap<>(recommendationRuleSetMap);
     }
 
+    /**
+     * Retrieves a list of recommendations for a given user.
+     *
+     * @param user_id The unique ID of the user for whom recommendations are to be retrieved.
+     * @return A list of RecommendationObject instances representing the recommendations.
+     *         Returns an empty list if no recommendations are found for the user.
+     */
+    // todo create interface
     public List<RecommendationObject> getRecommendations(UUID user_id) {
 
         List<RecommendationObject> recommendationObjects = new ArrayList<>();

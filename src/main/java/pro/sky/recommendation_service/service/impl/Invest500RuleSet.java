@@ -8,9 +8,18 @@ import pro.sky.recommendation_service.service.RecommendationRuleSet;
 
 import java.util.*;
 
+/*
+ * This class Invest500RuleSet implements the RecommendationRuleSet interface.
+ * This class is responsible for generating investment recommendation for users based on their transaction history.
+ * It specifically targets users who have:
+ * 1. A DEBIT account.
+ * 2. A SAVING account with a balance of at least 1000.
+ */
 @Component("Invest500RuleSet")
 public class Invest500RuleSet implements RecommendationRuleSet {
 
+    // Recommendation message
+    // todo move to enumeration of recommendations
     private final RecommendationObject recommendationObject = new RecommendationObject(
             UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"),
             "Invest 500",
@@ -27,29 +36,39 @@ public class Invest500RuleSet implements RecommendationRuleSet {
         this.recommendationsRepository = recommendationsRepository;
     }
 
+    // Getting recommendation for a specific user
     @Override
     public Optional<RecommendationObject> getRecommendationObject(UUID userId) {
+        // Get the transactional list of user from the repository
         List<Transaction> transactions = recommendationsRepository.getTransactions(userId);
 
+        // Iterate through transactional list by product type such as DEBIT, INVEST, SAVING (DEPOSIT)
+        // todo refactor it, because these values are initially empty
         boolean containDebit = false;
         int savingSum = 0;
-
         for (Transaction transaction : transactions) {
+            // Check that the product type is "DEBIT"
             if (transaction.getProductType().equals("DEBIT")) {
                 containDebit = true;
             }
 
+            // Check that the product type is "INVEST"
             if (transaction.getProductType().equals("INVEST")) {
                 return Optional.empty();
             }
 
-            if (transaction.getProductType().equals("SAVING") &&
-                    transaction.getTransactionType().equals("DEPOSIT")) {
+            // Check that the product type is "SAVING" and the transaction type is "DEPOSIT"
+            if (transaction.getProductType().equals("SAVING") && transaction.getTransactionType().equals("DEPOSIT")) {
+                // Increase the counted number of DEPOSIT transactions
                 savingSum += transaction.getAmount();
             }
-
         }
 
+        /*
+         * Check that the user has:
+         * 1. A DEBIT account.
+         * 2. A SAVING account with a balance of at least 1000.
+         */
         if (containDebit && savingSum >= 1_000) {
             return Optional.of(recommendationObject);
         } else {
