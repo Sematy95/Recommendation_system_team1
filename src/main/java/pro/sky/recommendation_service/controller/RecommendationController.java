@@ -4,9 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.recommendation_service.domain.ResponseForUser;
 import pro.sky.recommendation_service.domain.Transaction;
-import pro.sky.recommendation_service.repository.RuleRepository;
 import pro.sky.recommendation_service.service.RecommendationService;
-import pro.sky.recommendation_service.service.impl.RecommendationServiceImpl;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +14,7 @@ public class RecommendationController {
 
     private final RecommendationService recommendationService;
 
-    public RecommendationController(RecommendationService recommendationService, RuleRepository ruleRepository) {
+    public RecommendationController(RecommendationService recommendationService) {
         this.recommendationService = recommendationService;
 
     }
