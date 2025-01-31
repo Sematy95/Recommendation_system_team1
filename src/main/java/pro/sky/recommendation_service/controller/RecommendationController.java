@@ -18,6 +18,7 @@ public class RecommendationController {
         this.recommendationService = recommendationService;
 
     }
+
     @Operation(summary = "list of all valid recommendations for user")
     @GetMapping("/recommendation/{user_id}")
     public ResponseForUser getRecommendation(@PathVariable("user_id") UUID id) {
@@ -29,7 +30,5 @@ public class RecommendationController {
     public List<Transaction> getTransaction(@PathVariable("user_id") UUID id) {
         return recommendationService.getTransaction(id);
     }
-
-
 
 }

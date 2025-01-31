@@ -67,7 +67,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             case TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW:
                 return transactionSumCompareDepositWithdraw(user_ID, condition);
             default:
-                return false;
+                throw new IllegalArgumentException("Unexpected value: " + condition.getCompareType());
         }
 
     }
@@ -135,7 +135,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             case EQUAL -> result = depositAmount == withdrawAmount;
             case BIGGER_OR_EQUAL -> result = depositAmount >= withdrawAmount;
             case SMALLER_OR_EQUAL -> result = depositAmount <= withdrawAmount;
-            default -> result = false;
+            default -> throw new IllegalArgumentException("Unexpected value: " + condition.getCompareType());
         }
         return !condition.isNegate() && result;
     }
