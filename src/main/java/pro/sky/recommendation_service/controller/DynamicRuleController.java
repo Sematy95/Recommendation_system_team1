@@ -1,15 +1,13 @@
 package pro.sky.recommendation_service.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import org.apache.tomcat.util.digester.Rule;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.recommendation_service.domain.Condition;
 import pro.sky.recommendation_service.domain.DynamicRule;
 import pro.sky.recommendation_service.service.DynamicRuleService;
 
+
 import java.util.Collection;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/rule")
@@ -35,6 +33,7 @@ public class DynamicRuleController {
 
     }
 
+    @Operation(summary = "List of all dynamic_rules")
     @GetMapping
     public Collection<DynamicRule> getAllRules() {
         return dynamicRuleService.getAllDynamicRules();

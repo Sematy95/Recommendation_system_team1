@@ -8,19 +8,19 @@ import pro.sky.recommendation_service.service.RecommendationRuleSet;
 
 import java.util.*;
 
+import static pro.sky.recommendation_service.domain.enums.BaseProducts.*;
+import static pro.sky.recommendation_service.domain.enums.ProductType.CREDIT;
+import static pro.sky.recommendation_service.domain.enums.ProductType.DEBIT;
+import static pro.sky.recommendation_service.domain.enums.TransactionName.DEPOSIT;
+import static pro.sky.recommendation_service.domain.enums.TransactionName.WITHDRAW;
+
 @Component("SimpleLoanRuleSet")
 public class SimpleLoanRuleSet implements RecommendationRuleSet {
 
     private final RecommendationObject recommendationObject = new RecommendationObject(
-            UUID.fromString("ab138afb-f3ba-4a93-b74f-0fcee86d447f"),
-            "Простой кредит",
-            "Откройте мир выгодных кредитов с нами!" +
-                    "Ищете способ быстро и без лишних хлопот получить нужную сумму? Тогда наш выгодный кредит — именно то, что вам нужно!" +
-                    " Мы предлагаем низкие процентные ставки, гибкие условия и индивидуальный подход к каждому клиенту. Почему выбирают нас:" +
-                    "Быстрое рассмотрение заявки. Мы ценим ваше время, поэтому процесс рассмотрения заявки занимает всего несколько часов." +
-                    "Удобное оформление. Подать заявку на кредит можно онлайн на нашем сайте или в мобильном приложении." +
-                    "Широкий выбор кредитных продуктов. Мы предлагаем кредиты на различные цели: покупку недвижимости, автомобиля, образование, лечение и многое другое." +
-                    "Не упустите возможность воспользоваться выгодными условиями кредитования от нашей компании!"
+            UUID.fromString(SIMPLE_LOAN_UUID.getValue()),
+            SIMPLE_LOAN_NAME.getValue(),
+            SIMPLE_LOAN_TEXT.getValue()
     );
 
     private final RecommendationsRepository recommendationsRepository;
@@ -37,17 +37,17 @@ public class SimpleLoanRuleSet implements RecommendationRuleSet {
         int debitSum = 0;
 
         for (Transaction transaction : transactions) {
-            if (transaction.getProductType().equals("CREDIT")) {
+            if (transaction.getProductType().equals(CREDIT.getValue())) {
                 return Optional.empty();
             }
 
-            if (transaction.getProductType().equals("DEBIT") &&
-                    transaction.getTransactionType().equals("DEPOSIT")) {
+            if (transaction.getProductType().equals(DEBIT.getValue()) &&
+                    transaction.getTransactionType().equals(DEPOSIT.getValue())) {
                 debitSum += transaction.getAmount();
             }
 
-            if (transaction.getProductType().equals("DEBIT") &&
-                    transaction.getTransactionType().equals("WITHDRAW")) {
+            if (transaction.getProductType().equals(DEBIT.getValue()) &&
+                    transaction.getTransactionType().equals(WITHDRAW.getValue())) {
                 debitSpend += transaction.getAmount();
             }
         }

@@ -14,10 +14,10 @@ CREATE TABLE IF NOT EXISTS dynamic_rule
 
 CREATE TABLE IF NOT EXISTS condition
 (   id BIGINT PRIMARY KEY NOT NULL,
-    query BIGINT NOT NULL,
-    product_Type TEXT NOT NULL,
-    transaction_Name TEXT,
-    compare_Type TEXT,
+    query SMALLINT NOT NULL,
+    product_Type SMALLINT NOT NULL,
+    transaction_Name SMALLINT,
+    compare_Type SMALLINT,
     compare_Value BIGINT,
     negate BOOLEAN NOT NULL,
     parallel_Condition_Id BIGINT,
@@ -54,17 +54,17 @@ VALUES (1, 'Invest 500', '147f6a0f-3b91-413b-ab99-87f081d60d5a',
 
 -- changeset sematy:3
 INSERT INTO condition (id, query, product_Type, transaction_Name, compare_Type, compare_Value, negate,parallel_condition_id) VALUES
-(1, 0, 'INVEST', NULL, NULL, NULL, TRUE,NULL),
-(2, 2, 'SAVING', 'DEPOSIT', '>=', 1000, FALSE,null),
-(3, 0, 'DEBIT', NULL, NULL, NULL, FALSE,NULL),
+(1, 0, 2, NULL, NULL, NULL, TRUE,NULL),
+(2, 2, 3, 1, 3, 1000, FALSE,null),
+(3, 0, 0, NULL, NULL, NULL, FALSE,NULL),
 
-(4, 2, 'DEBIT', 'DEPOSIT', '>=', 50000, false,NULL),
-(5,2,'SAVING','DEPOSIT','>=',50000,FALSE,4),
-(6, 3, 'DEBIT', null, '>', null, false,NULL),
+(4, 2, 0, 1, 3, 50000, false,NULL),
+(5,2,3,1,3,50000,FALSE,4),
+(6, 3, 0, null, 0, null, false,NULL),
 
-(7, 0, 'CREDIT', null, null, null,true,NULL),
-(8, 3, 'DEBIT', null, '>', null, false,NULL),
-(9, 3, 'DEBIT', 'WITHDRAW', '>', 100000, false,NULL);
+(7, 0, 1, null, null, null,true,NULL),
+(8, 3, 0, null, 0, null, false,NULL),
+(9, 3, 0, 0, 0, 100000, false,NULL);
 
 -- changeset sematy:4
 INSERT INTO dynamic_rule_conditions (dynamic_rule_id, conditions_id) VALUES

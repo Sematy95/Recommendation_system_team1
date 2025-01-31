@@ -2,7 +2,10 @@ package pro.sky.recommendation_service.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import pro.sky.recommendation_service.domain.enums.CompareType;
+import pro.sky.recommendation_service.domain.enums.ProductType;
 import pro.sky.recommendation_service.domain.enums.QueryType;
+import pro.sky.recommendation_service.domain.enums.TransactionName;
 
 import java.util.Objects;
 
@@ -17,9 +20,9 @@ public class Condition {
     private long id;
 
     private QueryType query;
-    private String productType;
-    private String transactionName;
-    private String compareType;
+    private ProductType productType;
+    private TransactionName transactionName;
+    private CompareType compareType;
     private Integer compareValue;
     private boolean negate;
     private Long parallelConditionId;
@@ -28,7 +31,7 @@ public class Condition {
     public Condition() {
     }
 
-    public Condition(QueryType query, String productType, String transactionName, String compareType, Integer compareValue, boolean negate, Long parallelConditionId) {
+    public Condition(QueryType query, ProductType productType, TransactionName transactionName, CompareType compareType, Integer compareValue, boolean negate, Long parallelConditionId) {
         this.query = query;
         this.productType = productType;
         this.transactionName = transactionName;
@@ -54,27 +57,27 @@ public class Condition {
         this.query = query;
     }
 
-    public String getProductType() {
+    public ProductType getProductType() {
         return productType;
     }
 
-    public void setProductType(String productType) {
+    public void setProductType(ProductType productType) {
         this.productType = productType;
     }
 
-    public String getTransactionName() {
+    public TransactionName getTransactionName() {
         return transactionName;
     }
 
-    public void setTransactionName(String transactionName) {
+    public void setTransactionName(TransactionName transactionName) {
         this.transactionName = transactionName;
     }
 
-    public String getCompareType() {
+    public CompareType getCompareType() {
         return compareType;
     }
 
-    public void setCompareType(String compareType) {
+    public void setCompareType(CompareType compareType) {
         this.compareType = compareType;
     }
 
@@ -107,22 +110,22 @@ public class Condition {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Condition condition = (Condition) o;
-        return negate == condition.negate && Objects.equals(query, condition.query) && Objects.equals(productType, condition.productType) && Objects.equals(transactionName, condition.transactionName) && Objects.equals(compareType, condition.compareType) && Objects.equals(compareValue, condition.compareValue) ;
+        return negate == condition.negate && query == condition.query && productType == condition.productType && transactionName == condition.transactionName && compareType == condition.compareType && Objects.equals(compareValue, condition.compareValue) && Objects.equals(parallelConditionId, condition.parallelConditionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(query, productType, transactionName, compareType, compareValue, negate);
+        return Objects.hash(query, productType, transactionName, compareType, compareValue, negate, parallelConditionId);
     }
 
     @Override
     public String toString() {
         return "Condition{" +
                 "id=" + id +
-                ", query='" + query + '\'' +
-                ", productType='" + productType + '\'' +
-                ", transactionName='" + transactionName + '\'' +
-                ", compareType='" + compareType + '\'' +
+                ", query=" + query +
+                ", productType=" + productType +
+                ", transactionName=" + transactionName +
+                ", compareType=" + compareType +
                 ", compareValue=" + compareValue +
                 ", negate=" + negate +
                 ", parallelConditionId=" + parallelConditionId +

@@ -8,17 +8,17 @@ import pro.sky.recommendation_service.service.RecommendationRuleSet;
 
 import java.util.*;
 
+import static pro.sky.recommendation_service.domain.enums.BaseProducts.*;
+import static pro.sky.recommendation_service.domain.enums.ProductType.*;
+import static pro.sky.recommendation_service.domain.enums.TransactionName.DEPOSIT;
+
 @Component("Invest500RuleSet")
 public class Invest500RuleSet implements RecommendationRuleSet {
 
     private final RecommendationObject recommendationObject = new RecommendationObject(
-            UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"),
-            "Invest 500",
-            "Откройте свой путь к успеху с индивидуальным инвестиционным счетом (ИИС) от нашего банка! " +
-                    "Воспользуйтесь налоговыми льготами и начните инвестировать с умом. Пополните счет до конца " +
-                    "года и получите выгоду в виде вычета на взнос в следующем налоговом периоде. Не упустите " +
-                    "возможность разнообразить свой портфель, снизить риски и следить за актуальными рыночными " +
-                    "тенденциями. Откройте ИИС сегодня и станьте ближе к финансовой независимости!"
+            UUID.fromString(INVEST500_UUID.getValue()),
+            INVEST500_NAME.getValue(),
+            INVEST500_TEXT.getValue()
     );
 
     private final RecommendationsRepository recommendationsRepository;
@@ -35,16 +35,16 @@ public class Invest500RuleSet implements RecommendationRuleSet {
         int savingSum = 0;
 
         for (Transaction transaction : transactions) {
-            if (transaction.getProductType().equals("DEBIT")) {
+            if (transaction.getProductType().equals(DEBIT.getValue())) {
                 containDebit = true;
             }
 
-            if (transaction.getProductType().equals("INVEST")) {
+            if (transaction.getProductType().equals(INVEST.getValue())) {
                 return Optional.empty();
             }
 
-            if (transaction.getProductType().equals("SAVING") &&
-                    transaction.getTransactionType().equals("DEPOSIT")) {
+            if (transaction.getProductType().equals(SAVING) &&
+                    transaction.getTransactionType().equals(DEPOSIT)) {
                 savingSum += transaction.getAmount();
             }
 
