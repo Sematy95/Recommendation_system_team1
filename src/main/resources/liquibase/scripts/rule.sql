@@ -54,23 +54,24 @@ VALUES (1, 'Invest 500', '147f6a0f-3b91-413b-ab99-87f081d60d5a',
 
 -- changeset sematy:3
 INSERT INTO condition (id, query, product_Type, transaction_Name, compare_Type, compare_Value, negate,parallel_condition_id) VALUES
-(1, 0, 2, NULL, NULL, NULL, TRUE,NULL),
-(2, 2, 3, 1, 3, 1000, FALSE,null),
-(3, 0, 0, NULL, NULL, NULL, FALSE,NULL),
+(1, 0, 0, NULL, NULL, NULL, FALSE,NULL),
+(2, 0, 1, NULL, NULL, NULL, TRUE,null),
+(3, 2, 3, 1, 0, 1000, FALSE,NULL),
 
-(4, 2, 0, 1, 3, 50000, false,NULL),
-(5,2,3,1,3,50000,FALSE,4),
+
+(4,2,0,1,3,50000,FALSE,5),
+(5,2,3,1,3,5000,FALSE,null),
 (6, 3, 0, null, 0, null, false,NULL),
 
-(7, 0, 1, null, null, null,true,NULL),
+(7, 0, 1, null, null, null,TRUE,NULL),
 (8, 3, 0, null, 0, null, false,NULL),
-(9, 3, 0, 0, 0, 100000, false,NULL);
+(9, 2, 0, 0, 0, 100000, false,NULL);
 
 -- changeset sematy:4
 INSERT INTO dynamic_rule_conditions (dynamic_rule_id, conditions_id) VALUES
 (1,1),(1,2),(1,3),
-(2,4),(2,5),(2,6),
-(3,6),(3,7),(3,8);
+(2,1),(2,4),(2,6),
+(3,7),(3,8),(3,9);
 
 
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pro.sky.recommendation_service.domain.Condition;
 import pro.sky.recommendation_service.domain.enums.*;
 import pro.sky.recommendation_service.domain.*;
+import pro.sky.recommendation_service.repository.ConditionsRepository;
 import pro.sky.recommendation_service.repository.DynamicRuleRepository;
 import pro.sky.recommendation_service.repository.RecommendationsRepository;
 import pro.sky.recommendation_service.service.RecommendationService;
@@ -26,11 +27,14 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private final RecommendationsRepository recommendationsRepository;
     private final DynamicRuleRepository dynamicRuleRepository;
+    private final ConditionsRepository conditionsRepository;
 
-    public RecommendationServiceImpl(RecommendationsRepository recommendationsRepository, DynamicRuleRepository dynamicRuleRepository) {
+    public RecommendationServiceImpl(RecommendationsRepository recommendationsRepository, DynamicRuleRepository dynamicRuleRepository, ConditionsRepository conditionsRepository) {
         this.recommendationsRepository = recommendationsRepository;
         this.dynamicRuleRepository = dynamicRuleRepository;
+        this.conditionsRepository = conditionsRepository;
     }
+
 
     @Cacheable(value = "recommendationCache")
     @Override
@@ -57,19 +61,26 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private Boolean checkAllQueryTypes(UUID user_ID, Condition condition) {
 
+        boolean checkCondition;
+        boolean checkParallelCondition=false;
         switch (condition.getQuery()) {
-            case USER_OF:
-                return userOfCheck(user_ID, condition);
-            case ACTIVE_USER_OF:
-                return activeUserOfCheck(user_ID, condition);
-            case TRANSACTION_SUM_COMPARE:
-                return transactionSumCompareCheck(user_ID, condition);
-            case TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW:
-                return transactionSumCompareDepositWithdraw(user_ID, condition);
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + condition.getCompareType());
+            case USER_OF -> checkCondition = userOfCheck(user_ID, condition);
+            case ACTIVE_USER_OF -> checkCondition = activeUserOfCheck(user_ID, condition);
+            case TRANSACTION_SUM_COMPARE -> checkCondition = transactionSumCompareCheck(user_ID, condition);
+            case TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW -> checkCondition = transactionSumCompareDepositWithdrawCheck(user_ID, condition);
+            default -> throw new IllegalArgumentException("Unexpected value: " + condition.getQuery());
         }
-
+        if (!Objects.isNull(condition.getParallelConditionId())) {
+            Condition parallelCondition = conditionsRepository.findById(condition.getParallelConditionId()).orElse(null);
+            switch (parallelCondition.getQuery()) {
+                case USER_OF -> checkParallelCondition = userOfCheck(user_ID, condition);
+                case ACTIVE_USER_OF -> checkParallelCondition = activeUserOfCheck(user_ID, condition);
+                case TRANSACTION_SUM_COMPARE -> checkParallelCondition = transactionSumCompareCheck(user_ID, condition);
+                case TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW -> checkParallelCondition = transactionSumCompareDepositWithdrawCheck(user_ID, condition);
+                default -> throw new IllegalArgumentException("Unexpected value: " + parallelCondition.getQuery());
+            }
+        }
+        return (checkCondition || checkParallelCondition);
     }
 
     private int productTypeCounter(UUID user_ID, ProductType productType) {
@@ -80,6 +91,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 counter++;
             }
         }
+        log.info("counter: " + counter);
         return counter;
     }
 
@@ -104,6 +116,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                     && transaction.getTransactionType().equals(condition.getTransactionName().toString())) {
                 amount += transaction.getAmount();
             }
+            log.info("amount: " + amount);
         }
         switch (condition.getCompareType()) {
             case BIGGER -> result = amount > condition.getCompareValue();
@@ -116,7 +129,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         return !condition.isNegate() && result;
     }
 
-    private boolean transactionSumCompareDepositWithdraw(UUID user_ID, Condition condition) {
+    private boolean transactionSumCompareDepositWithdrawCheck(UUID user_ID, Condition condition) {
         List<Transaction> transactions = recommendationsRepository.getTransactions(user_ID);
         int depositAmount = 0;
         int withdrawAmount = 0;
@@ -129,6 +142,9 @@ public class RecommendationServiceImpl implements RecommendationService {
                 withdrawAmount += transaction.getAmount();
             }
         }
+        log.info("depositAmount: " + depositAmount);
+        log.info("withdrawAmount: " + withdrawAmount);
+
         switch (condition.getCompareType()) {
             case BIGGER -> result = depositAmount > withdrawAmount;
             case SMALLER -> result = depositAmount < withdrawAmount;
