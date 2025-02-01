@@ -73,7 +73,13 @@ INSERT INTO dynamic_rule_conditions (dynamic_rule_id, conditions_id) VALUES
 (2,1),(2,4),(2,6),
 (3,7),(3,8),(3,9);
 
-
+-- changeset dmitry:5
+CREATE TABLE statistics
+(
+    id BIGINT PRIMARY KEY NOT NULL,
+    rule_id BIGINT NOT NULL REFERENCES dynamic_rule(id),
+    counts BIGINT NOT NULL
+);
 
 
 

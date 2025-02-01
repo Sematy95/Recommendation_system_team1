@@ -4,19 +4,26 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.recommendation_service.domain.DynamicRule;
+import pro.sky.recommendation_service.domain.Statistic;
+import pro.sky.recommendation_service.dto.StatisticObject;
 import pro.sky.recommendation_service.service.DynamicRuleService;
+import pro.sky.recommendation_service.service.StatisticService;
+import pro.sky.recommendation_service.service.impl.StatisticServiceImpl;
 
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/rule")
 public class DynamicRuleController {
 
     private final DynamicRuleService dynamicRuleService;
+    private final StatisticServiceImpl statisticService;
 
-    public DynamicRuleController(DynamicRuleService dynamicRuleService) {
+    public DynamicRuleController(DynamicRuleService dynamicRuleService, StatisticServiceImpl statisticService) {
         this.dynamicRuleService = dynamicRuleService;
+        this.statisticService = statisticService;
     }
 
     @Operation(summary = "Add new dynamic rule")
@@ -37,5 +44,11 @@ public class DynamicRuleController {
     @GetMapping
     public Collection<DynamicRule> getAllRules() {
         return dynamicRuleService.getAllDynamicRules();
+    }
+
+    @Operation(summary = "Get dynamic rules statistics")
+    @GetMapping("/stats")
+    public List<StatisticObject> getStatistic() {
+        return statisticService.getAllStats();
     }
 }

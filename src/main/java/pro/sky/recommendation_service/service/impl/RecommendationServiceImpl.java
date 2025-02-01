@@ -10,6 +10,7 @@ import pro.sky.recommendation_service.domain.*;
 import pro.sky.recommendation_service.repository.ConditionsRepository;
 import pro.sky.recommendation_service.repository.DynamicRuleRepository;
 import pro.sky.recommendation_service.repository.RecommendationsRepository;
+import pro.sky.recommendation_service.repository.StatisticRepository;
 import pro.sky.recommendation_service.service.RecommendationService;
 
 import java.util.*;
@@ -28,11 +29,16 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final RecommendationsRepository recommendationsRepository;
     private final DynamicRuleRepository dynamicRuleRepository;
     private final ConditionsRepository conditionsRepository;
+    private final StatisticRepository statisticRepository;
 
-    public RecommendationServiceImpl(RecommendationsRepository recommendationsRepository, DynamicRuleRepository dynamicRuleRepository, ConditionsRepository conditionsRepository) {
+    public RecommendationServiceImpl(RecommendationsRepository recommendationsRepository,
+                                     DynamicRuleRepository dynamicRuleRepository,
+                                     ConditionsRepository conditionsRepository,
+                                     StatisticRepository statisticRepository) {
         this.recommendationsRepository = recommendationsRepository;
         this.dynamicRuleRepository = dynamicRuleRepository;
         this.conditionsRepository = conditionsRepository;
+        this.statisticRepository = statisticRepository;
     }
 
 
@@ -41,9 +47,11 @@ public class RecommendationServiceImpl implements RecommendationService {
     public ResponseForUser getRecommendations(UUID user_id) {
         Collection<DynamicRule> validDynamicRules = new ArrayList<>();
         Collection<DynamicRule> dynamicRules = dynamicRuleRepository.findAll();
-        dynamicRules.stream().filter(dynamicRule -> checkDynamicRule(dynamicRule, user_id)).forEach(validDynamicRules::add);
-        ResponseForUser responseForUser = new ResponseForUser(user_id, validDynamicRules);
-        return responseForUser;
+        dynamicRules.stream()
+                .filter(dynamicRule -> checkDynamicRule(dynamicRule, user_id))
+                .peek(dynamicRule -> statisticRepository.incrCount(dynamicRule))
+                .forEach(validDynamicRules::add);
+        return new ResponseForUser(user_id, validDynamicRules);
     }
 
 
