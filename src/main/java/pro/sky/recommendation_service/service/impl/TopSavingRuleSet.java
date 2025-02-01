@@ -69,7 +69,6 @@ public class TopSavingRuleSet implements RecommendationRuleSet {
                 debitSum += transaction.getAmount();
             }
 
-
             // Check that the product type is "DEBIT" and the transaction type is "WITHDRAW"
             if (transaction.getProductType().equals("DEBIT") && transaction.getTransactionType().equals("WITHDRAW")) {
                 // Increase the counted number of DEBIT-WITHDRAW transactions

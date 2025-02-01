@@ -3,12 +3,22 @@ package pro.sky.recommendation_service.dto;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Represents a recommendation object with an ID, name, and descriptive text.
+ * This class is immutable, as its fields are final.
+ */
 public class RecommendationObject {
-
     private final UUID id;
     private final String name;
     private final String text;
 
+    /**
+     * Constructs a new RecommendationObject.
+     *
+     * @param id   The unique identifier of the recommendation.
+     * @param name The name of the recommendation.
+     * @param text The descriptive text of the recommendation.
+     */
     public RecommendationObject(UUID id, String name, String text) {
         this.id = id;
         this.name = name;

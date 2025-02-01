@@ -16,6 +16,7 @@ import pro.sky.recommendation_service.service.RecommendationService;
 import java.util.List;
 import java.util.UUID;
 
+
 @RestController
 public class RecommendationController {
 
@@ -25,7 +26,12 @@ public class RecommendationController {
         this.recommendationService = recommendationService;
     }
 
-    // Search recommendations by client ID
+    /**
+     * Get recommendations for a given user ID.
+     *
+     * @param id The UUID of the user for whom recommendations are requested.
+     * @return A list of RecommendationObject instances representing the recommendations.
+     */
     @Operation(
             summary = "Поиск рекомендаций по идентификатору пользователя",
             responses = {
