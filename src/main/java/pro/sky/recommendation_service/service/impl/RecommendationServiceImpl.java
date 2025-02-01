@@ -98,13 +98,13 @@ public class RecommendationServiceImpl implements RecommendationService {
     private boolean userOfCheck(UUID user_ID, Condition condition) {
         int amount = productTypeCounter(user_ID, condition.getProductType());
         boolean result = amount > 0;
-        return !condition.isNegate() && result;
+        return condition.isNegate() ^ result;
     }
 
     private boolean activeUserOfCheck(UUID user_ID, Condition condition) {
         int amount = productTypeCounter(user_ID, condition.getProductType());
         boolean result = amount > 5;
-        return !condition.isNegate() && result;
+        return condition.isNegate() ^ result;
     }
 
     private boolean transactionSumCompareCheck(UUID user_ID, Condition condition) {
@@ -126,7 +126,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             case SMALLER_OR_EQUAL -> result = amount <= condition.getCompareValue();
             default -> throw new IllegalArgumentException("Unexpected value: " + condition.getCompareType());
         }
-        return !condition.isNegate() && result;
+        return condition.isNegate() ^ result;
     }
 
     private boolean transactionSumCompareDepositWithdrawCheck(UUID user_ID, Condition condition) {
@@ -153,7 +153,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             case SMALLER_OR_EQUAL -> result = depositAmount <= withdrawAmount;
             default -> throw new IllegalArgumentException("Unexpected value: " + condition.getCompareType());
         }
-        return !condition.isNegate() && result;
+        return condition.isNegate() ^ result;
     }
 
     @Override
