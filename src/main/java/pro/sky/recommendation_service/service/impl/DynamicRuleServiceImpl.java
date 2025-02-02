@@ -50,6 +50,7 @@ public class DynamicRuleServiceImpl implements DynamicRuleService {
 
     @Override
     public Collection<DynamicRule> getAllDynamicRules() {
+        log.info("Was invoked method for getting all dynamic rules");
         return dynamicRuleRepository.findAll();
     }
 

@@ -45,6 +45,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Cacheable(value = "recommendationCache")
     @Override
     public ResponseForUser getRecommendations(UUID user_id) {
+        log.info("Was invoked method for getting recommendations by user_id: {}", user_id);
         Collection<DynamicRule> validDynamicRules = new ArrayList<>();
         Collection<DynamicRule> dynamicRules = dynamicRuleRepository.findAll();
         dynamicRules.stream()
@@ -99,7 +100,6 @@ public class RecommendationServiceImpl implements RecommendationService {
                 counter++;
             }
         }
-        log.info("counter: " + counter);
         return counter;
     }
 
@@ -124,7 +124,6 @@ public class RecommendationServiceImpl implements RecommendationService {
                     && transaction.getTransactionType().equals(condition.getTransactionName().toString())) {
                 amount += transaction.getAmount();
             }
-            log.info("amount: " + amount);
         }
         switch (condition.getCompareType()) {
             case BIGGER -> result = amount > condition.getCompareValue();
@@ -150,8 +149,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 withdrawAmount += transaction.getAmount();
             }
         }
-        log.info("depositAmount: " + depositAmount);
-        log.info("withdrawAmount: " + withdrawAmount);
+
 
         switch (condition.getCompareType()) {
             case BIGGER -> result = depositAmount > withdrawAmount;
