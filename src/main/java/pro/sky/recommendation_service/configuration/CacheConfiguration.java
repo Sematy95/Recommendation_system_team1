@@ -16,7 +16,7 @@ public class CacheConfiguration {
 
     @Bean
     @Primary
-    public CacheManager cacheManager() {
+    public CaffeineCacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager("recommendationCache");
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .maximumSize(1));
