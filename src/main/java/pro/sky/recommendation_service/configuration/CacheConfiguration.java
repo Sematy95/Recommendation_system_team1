@@ -10,10 +10,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+/**
+ * Configuration class for setting up caching using Caffeine.
+ * This class enables caching and defines a primary CacheManager bean.
+ */
 @EnableCaching
 @Configuration
 public class CacheConfiguration {
-
+    /**
+     * It will be used by default for caching operations in the application.
+     *
+     * @return A CaffeineCacheManager instance configured with specific settings.
+     */
     @Bean
     @Primary
     public CacheManager cacheManager() {
@@ -22,5 +30,4 @@ public class CacheConfiguration {
                 .maximumSize(1));
         return cacheManager;
     }
-
 }

@@ -6,9 +6,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Represents a dynamic rule with associated conditions.
+ * This entity is stored in the "dynamic_rule" table.
+ */
 @Entity
 @Table(name="dynamic_rule")
 public class DynamicRule {
+    /**
+     * The unique identifier for the DynamicRule entity.
+     * This field represents the primary key in the "dynamic_rule" table of the database.
+     * It is automatically generated using a database sequence named "dynamic_rule_seq".
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dynamic_rule_seq")
     @SequenceGenerator(name = "dynamic_rule_seq", allocationSize = 1)
@@ -20,9 +29,20 @@ public class DynamicRule {
     @ManyToMany
     private List<Condition> conditions;
 
+    /**
+     * Default constructor for the DynamicRule entity. Required by JPA.
+     */
     public DynamicRule() {
     }
 
+    /**
+     * Constructs a new DynamicRule object.
+     *
+     * @param product_name The name of the product associated with the rule.
+     * @param product_id   The UUID of the product associated with the rule.
+     * @param product_text The text description of the product.
+     * @param conditions   The list of conditions that must be met for the rule to apply.
+     */
     public DynamicRule(String product_name, UUID product_id, String product_text, List<Condition> conditions) {
         this.product_name = product_name;
         this.product_id = product_id;
@@ -75,7 +95,11 @@ public class DynamicRule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DynamicRule that = (DynamicRule) o;
-        return Objects.equals(id, that.id) && Objects.equals(product_name, that.product_name) && Objects.equals(product_id, that.product_id) && Objects.equals(product_text, that.product_text) && Objects.equals(conditions, that.conditions);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(product_name, that.product_name) &&
+                Objects.equals(product_id, that.product_id) &&
+                Objects.equals(product_text, that.product_text) &&
+                Objects.equals(conditions, that.conditions);
     }
 
     @Override

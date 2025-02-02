@@ -14,25 +14,33 @@ import pro.sky.recommendation_service.service.impl.TopSavingRuleSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service class forgetting recommendations.
+ */
 @Service
 public class RecommendationService {
-
     private final Map<String, RecommendationRuleSet> recommendationRuleSets;
 
     public RecommendationService(Map<String, RecommendationRuleSet> recommendationRuleSetMap) {
         recommendationRuleSets = new HashMap<>(recommendationRuleSetMap);
     }
 
+    /**
+     * Retrieves a list of recommendations for a given user.
+     *
+     * @param user_id The unique ID of the user for whom recommendations are to be retrieved.
+     * @return A list of RecommendationObject instances representing the recommendations.
+     *         Returns an empty list if no recommendations are found for the user.
+     */
+    // todo create interface
     @Cacheable
     public List<RecommendationObject> getRecommendations(UUID user_id) {
-
         List<RecommendationObject> recommendationObjects = new ArrayList<>();
         for (RecommendationRuleSet recommendationRuleSet : recommendationRuleSets.values()) {
             if (recommendationRuleSet.getRecommendationObject(user_id).isPresent()) {
                 recommendationObjects.add(recommendationRuleSet.getRecommendationObject(user_id).get());
             }
         }
-
         return recommendationObjects;
     }
 }

@@ -9,6 +9,9 @@ import pro.sky.recommendation_service.domain.Transaction;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Repository class for accessing transaction data from the database.
+ */
 @Repository
 public class RecommendationsRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -17,6 +20,12 @@ public class RecommendationsRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Get a list of transactions for a given user ID.
+     *
+     * @param user_ID   The UUID of the user for whom transactions are to be retrieved.
+     * @return A list of Transaction objects representing the user's transactions.
+     */
     public List<Transaction> getTransactions(UUID user_ID) {
         return jdbcTemplate.query(
                 "SELECT t.type as transaction_type, p.type as product_type, t.amount " +

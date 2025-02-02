@@ -1,5 +1,8 @@
 package pro.sky.recommendation_service.domain.enums;
 
+/**
+ * Enum representing the different types of financial products.
+ */
 public enum ProductType {
     DEBIT("DEBIT"),
     CREDIT("CREDIT"),
@@ -14,6 +17,5 @@ public enum ProductType {
 
     ProductType(String value) {
         this.value = value;
-
     }
 }

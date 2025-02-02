@@ -7,11 +7,18 @@ import pro.sky.recommendation_service.domain.Condition;
 
 import java.util.*;
 
+/**
+ * Repository class for managing dynamic rules in the database.
+ */
 @Repository
 public class RuleRepository  {
-
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Constructs a new RuleRepository.
+     *
+     * @param jdbcTemplate The JdbcTemplate to use for database interactions
+     */
     public RuleRepository(@Qualifier("defaultJdbcTemplate") JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -24,6 +31,11 @@ public class RuleRepository  {
 //                condition.isNegate());
 //    }
 
+    /**
+     * Deletes a dynamic rule from the database by its ID.
+     *
+     * @param id The UUID of the rule to be deleted.
+     */
     public void deleteRule(UUID id) {
         jdbcTemplate.update("DELETE FROM rules WHERE id = ?",
                 id);
@@ -35,5 +47,4 @@ public class RuleRepository  {
 //                        new ArrayList<String>(rs.getArray("arguments")),
 //                        rs.getBoolean("negate")));
 //    }
-
 }

@@ -28,6 +28,3 @@ CREATE TABLE IF NOT EXISTS dynamic_rule_conditions (
   dynamic_rule_id BIGINT NOT NULL,
   conditions_id BIGINT NOT NULL
 );
-
-
-
