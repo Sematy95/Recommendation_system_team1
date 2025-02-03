@@ -70,26 +70,27 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     private Boolean checkAllQueryTypes(UUID user_ID, Condition condition) {
 
+        boolean checkCondition = switchQuery(user_ID, condition);
+        boolean checkParallelCondition = false;
+        if (!Objects.isNull(condition.getParallelConditionId())) {
+            Condition parallelCondition = conditionsRepository.findById(condition.getParallelConditionId()).orElse(null);
+            checkParallelCondition = switchQuery(user_ID, parallelCondition);
+
+        }
+        return (checkCondition || checkParallelCondition);
+    }
+
+    private boolean switchQuery(UUID user_ID, Condition condition) {
         boolean checkCondition;
-        boolean checkParallelCondition=false;
         switch (condition.getQuery()) {
             case USER_OF -> checkCondition = userOfCheck(user_ID, condition);
             case ACTIVE_USER_OF -> checkCondition = activeUserOfCheck(user_ID, condition);
             case TRANSACTION_SUM_COMPARE -> checkCondition = transactionSumCompareCheck(user_ID, condition);
-            case TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW -> checkCondition = transactionSumCompareDepositWithdrawCheck(user_ID, condition);
+            case TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW ->
+                    checkCondition = transactionSumCompareDepositWithdrawCheck(user_ID, condition);
             default -> throw new IllegalArgumentException("Unexpected value: " + condition.getQuery());
         }
-        if (!Objects.isNull(condition.getParallelConditionId())) {
-            Condition parallelCondition = conditionsRepository.findById(condition.getParallelConditionId()).orElse(null);
-            switch (parallelCondition.getQuery()) {
-                case USER_OF -> checkParallelCondition = userOfCheck(user_ID, condition);
-                case ACTIVE_USER_OF -> checkParallelCondition = activeUserOfCheck(user_ID, condition);
-                case TRANSACTION_SUM_COMPARE -> checkParallelCondition = transactionSumCompareCheck(user_ID, condition);
-                case TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW -> checkParallelCondition = transactionSumCompareDepositWithdrawCheck(user_ID, condition);
-                default -> throw new IllegalArgumentException("Unexpected value: " + parallelCondition.getQuery());
-            }
-        }
-        return (checkCondition || checkParallelCondition);
+        return checkCondition;
     }
 
     private int productTypeCounter(UUID user_ID, ProductType productType) {
@@ -118,21 +119,14 @@ public class RecommendationServiceImpl implements RecommendationService {
     private boolean transactionSumCompareCheck(UUID user_ID, Condition condition) {
         List<Transaction> transactions = recommendationsRepository.getTransactions(user_ID);
         int amount = 0;
-        boolean result;
+
         for (Transaction transaction : transactions) {
             if (transaction.getProductType().equals(condition.getProductType().toString())
                     && transaction.getTransactionType().equals(condition.getTransactionName().toString())) {
                 amount += transaction.getAmount();
             }
         }
-        switch (condition.getCompareType()) {
-            case BIGGER -> result = amount > condition.getCompareValue();
-            case SMALLER -> result = amount < condition.getCompareValue();
-            case EQUAL -> result = amount == condition.getCompareValue();
-            case BIGGER_OR_EQUAL -> result = amount >= condition.getCompareValue();
-            case SMALLER_OR_EQUAL -> result = amount <= condition.getCompareValue();
-            default -> throw new IllegalArgumentException("Unexpected value: " + condition.getCompareType());
-        }
+        boolean result = switchCompareType(amount, condition.getCompareValue(), condition);
         return condition.isNegate() ^ result;
     }
 
@@ -140,7 +134,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         List<Transaction> transactions = recommendationsRepository.getTransactions(user_ID);
         int depositAmount = 0;
         int withdrawAmount = 0;
-        boolean result;
+
         for (Transaction transaction : transactions) {
             if (transaction.getProductType().equals(condition.getProductType().toString()) && transaction.getTransactionType().equals(DEPOSIT.getValue())) {
                 depositAmount += transaction.getAmount();
@@ -149,17 +143,21 @@ public class RecommendationServiceImpl implements RecommendationService {
                 withdrawAmount += transaction.getAmount();
             }
         }
+        boolean result = switchCompareType(depositAmount, withdrawAmount, condition);
+        return condition.isNegate() ^ result;
+    }
 
-
+    private boolean switchCompareType(int a, int b, Condition condition) {
+        boolean result;
         switch (condition.getCompareType()) {
-            case BIGGER -> result = depositAmount > withdrawAmount;
-            case SMALLER -> result = depositAmount < withdrawAmount;
-            case EQUAL -> result = depositAmount == withdrawAmount;
-            case BIGGER_OR_EQUAL -> result = depositAmount >= withdrawAmount;
-            case SMALLER_OR_EQUAL -> result = depositAmount <= withdrawAmount;
+            case BIGGER -> result = a > b;
+            case SMALLER -> result = a < b;
+            case EQUAL -> result = a == b;
+            case BIGGER_OR_EQUAL -> result = a >= b;
+            case SMALLER_OR_EQUAL -> result = a <= b;
             default -> throw new IllegalArgumentException("Unexpected value: " + condition.getCompareType());
         }
-        return condition.isNegate() ^ result;
+        return result;
     }
 
     @Override
