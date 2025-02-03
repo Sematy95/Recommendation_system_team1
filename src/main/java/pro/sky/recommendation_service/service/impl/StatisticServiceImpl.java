@@ -30,7 +30,7 @@ public class StatisticServiceImpl {
         log.info("stat addition method was invoked");
 
         Statistic statistic = new Statistic(dynamicRule, count);
-        statisticRepository.save(new Statistic(dynamicRule, count));
+        statisticRepository.save(statistic);
     }
 
     public void deleteStat(long id) {
