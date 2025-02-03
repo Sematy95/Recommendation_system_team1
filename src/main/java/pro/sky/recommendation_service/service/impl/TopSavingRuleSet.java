@@ -8,18 +8,19 @@ import pro.sky.recommendation_service.service.RecommendationRuleSet;
 
 import java.util.*;
 
+import static pro.sky.recommendation_service.domain.enums.BaseProducts.*;
+import static pro.sky.recommendation_service.domain.enums.ProductType.DEBIT;
+import static pro.sky.recommendation_service.domain.enums.ProductType.SAVING;
+import static pro.sky.recommendation_service.domain.enums.TransactionName.DEPOSIT;
+import static pro.sky.recommendation_service.domain.enums.TransactionName.WITHDRAW;
+
 @Component("TopSavingRuleSet")
 public class TopSavingRuleSet implements RecommendationRuleSet {
 
     private final RecommendationObject recommendationObject = new RecommendationObject(
-            UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925"),
-            "Top Saving",
-            "Откройте свою собственную «Копилку» с нашим банком! «Копилка» — это уникальный банковский инструмент, который поможет вам легко и удобно" +
-                    " накапливать деньги на важные цели. Больше никаких забытых чеков и потерянных квитанций — всё под контролем!" +
-                    "Преимущества «Копилки»: Накопление средств на конкретные цели. Установите лимит и срок накопления, и банк будет автоматически переводить определенную сумму на ваш счет." +
-                    "Прозрачность и контроль. Отслеживайте свои доходы и расходы, контролируйте процесс накопления и корректируйте стратегию при необходимости." +
-                    "Безопасность и надежность. Ваши средства находятся под защитой банка, а доступ к ним возможен только через мобильное приложение или интернет-банкинг." +
-                    "Начните использовать «Копилку» уже сегодня и станьте ближе к своим финансовым целям!"
+            UUID.fromString(TOP_SAVING_UUID.getValue()),
+            TOP_SAVING_NAME.getValue(),
+            TOP_SAVING_TEXT.getValue()
     );
 
     private final RecommendationsRepository recommendationsRepository;
@@ -38,22 +39,22 @@ public class TopSavingRuleSet implements RecommendationRuleSet {
         int savingSum = 0;
 
         for (Transaction transaction : transactions) {
-            if (transaction.getProductType().equals("DEBIT")) {
+            if (transaction.getProductType().equals(DEBIT.getValue())) {
                 containDebit = true;
             }
 
-            if (transaction.getProductType().equals("SAVING") &&
-                    transaction.getTransactionType().equals("DEPOSIT")) {
+            if (transaction.getProductType().equals(SAVING.getValue()) &&
+                    transaction.getTransactionType().equals(DEPOSIT.getValue())) {
                 savingSum += transaction.getAmount();
             }
 
-            if (transaction.getProductType().equals("DEBIT") &&
-                    transaction.getTransactionType().equals("DEPOSIT")) {
+            if (transaction.getProductType().equals(DEBIT.getValue()) &&
+                    transaction.getTransactionType().equals(DEPOSIT.getValue())) {
                 debitSum += transaction.getAmount();
             }
 
-            if (transaction.getProductType().equals("DEBIT") &&
-                    transaction.getTransactionType().equals("WITHDRAW")) {
+            if (transaction.getProductType().equals(DEBIT.getValue()) &&
+                    transaction.getTransactionType().equals(WITHDRAW.getValue())) {
                 debitSpend += transaction.getAmount();
             }
         }
