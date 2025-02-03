@@ -27,6 +27,11 @@ public class DynamicRuleServiceImpl implements DynamicRuleService {
 
     private static final Logger log = LoggerFactory.getLogger(DynamicRuleServiceImpl.class);
 
+    /**
+     * Метод для добавления динамического правила в БД с добавлением счетчика срабатываний со значением 0
+     * @param dynamicRule динамическое правило, которое хотим добавить
+     * @return добавленное динамическое правило для передачи в контроллер
+     */
     @Override
     public DynamicRule addRule(DynamicRule dynamicRule) {
         log.info("Was invoked method for adding dynamic rule id={} with product name - {} ", dynamicRule.getId(), dynamicRule.getProduct_name());
@@ -34,6 +39,10 @@ public class DynamicRuleServiceImpl implements DynamicRuleService {
         return dynamicRuleRepository.save(dynamicRule);
     }
 
+    /**
+     * Метод для удаления динамического правила по id
+     * @param id
+     */
     @Override
     public void deleteRule(long id) {
         try {
@@ -48,6 +57,10 @@ public class DynamicRuleServiceImpl implements DynamicRuleService {
         }
     }
 
+    /**
+     * Метод для вывода всех динамических правил
+     * @return Лист всех динамических правил из БД
+     */
     @Override
     public Collection<DynamicRule> getAllDynamicRules() {
         log.info("Was invoked method for getting all dynamic rules");

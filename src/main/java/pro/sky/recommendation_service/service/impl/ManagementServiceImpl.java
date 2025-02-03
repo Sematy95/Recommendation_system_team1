@@ -42,6 +42,13 @@ public class ManagementServiceImpl implements ManagementService {
         });
     }
 
+    /**
+     * Метод для извлечения имени и версии проекта из файла pom.xml
+     * @return Возвращает имя и версию проекта
+     * @throws IOException Ошибки неудачных/прерванных операций ввода-вывода
+     * @throws SAXException Ошибки или предупреждения, полученные либо из синтаксического анализатора XML, либо из приложения
+     * @throws ParserConfigurationException Ошибки конфигурации
+     */
     public String getInfo() throws IOException, SAXException, ParserConfigurationException {
         log.info("project info method was invoked");
         String str = null;
@@ -58,6 +65,12 @@ public class ManagementServiceImpl implements ManagementService {
         return str;
     }
 
+    /**
+     *
+     * @param parent корневой элемент
+     * @param tagName корневой элемент
+     * @return Возврашает строку с требуемым контентом из элемента сгенерированного документа
+     */
     private static String getElementValue(Element parent, String tagName) {
         NodeList nodeList = parent.getElementsByTagName(tagName);
         if (nodeList.getLength() > 0) {

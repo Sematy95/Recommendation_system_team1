@@ -41,7 +41,11 @@ public class RecommendationServiceImpl implements RecommendationService {
         this.statisticRepository = statisticRepository;
     }
 
-
+    /**
+     * Метод для вывода всех рекомендаций, актуальных для пользователя
+     * @param user_id Идентификатор пользователя
+     * @return Список всех рекомендаций, актуальных для данного пользователя
+     */
     @Cacheable(value = "recommendationCache")
     @Override
     public ResponseForUser getRecommendations(UUID user_id) {
@@ -55,7 +59,12 @@ public class RecommendationServiceImpl implements RecommendationService {
         return new ResponseForUser(user_id, validDynamicRules);
     }
 
-
+    /**
+     * Метод, проверяющий, актуально ли динамическое правило (рекомендация) для данного пользователя
+     * @param dynamicRule Динамическое правило
+     * @param user_id Идентификатор пользователя
+     * @return true или false
+     */
     private Boolean checkDynamicRule(DynamicRule dynamicRule, UUID user_id) {
         if (dynamicRule == null) {
             log.info("dynamicRule is null");
@@ -68,6 +77,12 @@ public class RecommendationServiceImpl implements RecommendationService {
         return true;
     }
 
+    /**
+     * Метод, проверяющий актуальность условия (condition) из динамического правила для пользователя или параллельного условия (если есть)
+     * @param user_ID Идентификатор пользователя
+     * @param condition Условие из динамического правила
+     * @return true или false
+     */
     private Boolean checkAllQueryTypes(UUID user_ID, Condition condition) {
 
         boolean checkCondition = switchQuery(user_ID, condition);
@@ -80,6 +95,12 @@ public class RecommendationServiceImpl implements RecommendationService {
         return (checkCondition || checkParallelCondition);
     }
 
+    /**
+     * Метод для перебора всех возможных типов запроса из условия
+     * @param user_ID Идентификатор пользователя
+     * @param condition Условие из динамического правила
+     * @return true или false
+     */
     private boolean switchQuery(UUID user_ID, Condition condition) {
         boolean checkCondition;
         switch (condition.getQuery()) {
@@ -93,6 +114,12 @@ public class RecommendationServiceImpl implements RecommendationService {
         return checkCondition;
     }
 
+    /**
+     * Метод-счётчик для проверки количества транзакций с определенным продуктом у пользователя для проверки запросов USER_OF и ACTIVE_USER_OF
+     * @param user_ID Идентификатор пользователя
+     * @param productType Тип продукта в условии
+     * @return число транзакций с определенным продуктом (int)
+     */
     private int productTypeCounter(UUID user_ID, ProductType productType) {
         List<Transaction> transactions = recommendationsRepository.getTransactions(user_ID);
         int counter = 0;
@@ -104,18 +131,35 @@ public class RecommendationServiceImpl implements RecommendationService {
         return counter;
     }
 
+    /**
+     * Метод для проверки типа запроса USER_OF в условии
+     * @param user_ID Идентификатор пользователя
+     * @param condition Условие
+     * @return true или false
+     */
     private boolean userOfCheck(UUID user_ID, Condition condition) {
         int amount = productTypeCounter(user_ID, condition.getProductType());
         boolean result = amount > 0;
         return condition.isNegate() ^ result;
     }
 
+    /**
+     * Метод для проверки типа запроса ACTIVE_USER_OF в условии
+     * @param user_ID Идентификатор пользователя
+     * @param condition Условие
+     * @return true или false
+     */
     private boolean activeUserOfCheck(UUID user_ID, Condition condition) {
         int amount = productTypeCounter(user_ID, condition.getProductType());
         boolean result = amount > 5;
         return condition.isNegate() ^ result;
     }
-
+    /**
+     * Метод для проверки типа запроса TRANSACTION_SUM_COMPARE в условии
+     * @param user_ID Идентификатор пользователя
+     * @param condition Условие
+     * @return true или false
+     */
     private boolean transactionSumCompareCheck(UUID user_ID, Condition condition) {
         List<Transaction> transactions = recommendationsRepository.getTransactions(user_ID);
         int amount = 0;
@@ -129,7 +173,12 @@ public class RecommendationServiceImpl implements RecommendationService {
         boolean result = switchCompareType(amount, condition.getCompareValue(), condition);
         return condition.isNegate() ^ result;
     }
-
+    /**
+     * Метод для проверки типа запроса TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW в условии
+     * @param user_ID Идентификатор пользователя
+     * @param condition Условие
+     * @return true или false
+     */
     private boolean transactionSumCompareDepositWithdrawCheck(UUID user_ID, Condition condition) {
         List<Transaction> transactions = recommendationsRepository.getTransactions(user_ID);
         int depositAmount = 0;
@@ -147,6 +196,13 @@ public class RecommendationServiceImpl implements RecommendationService {
         return condition.isNegate() ^ result;
     }
 
+    /**
+     * Метод для перебора всех возможных операторов сравнения в запросах TRANSACTION_SUM_COMPARE и TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW
+     * @param a Первое число
+     * @param b Второе число
+     * @param condition Условие
+     * @return результат сравнения (true или false)
+     */
     private boolean switchCompareType(int a, int b, Condition condition) {
         boolean result;
         switch (condition.getCompareType()) {
@@ -160,6 +216,11 @@ public class RecommendationServiceImpl implements RecommendationService {
         return result;
     }
 
+    /**
+     * Метод для получения всех транзакций пользователя
+     * @param user_id Идентификатор пользователя
+     * @return Список транзакций пользователя с типом продукта, видом транзакции (пополнение или трата) и суммой транзакции
+     */
     @Override
     public List<Transaction> getTransaction(UUID user_id) {
         return recommendationsRepository.getTransactions(user_id);
