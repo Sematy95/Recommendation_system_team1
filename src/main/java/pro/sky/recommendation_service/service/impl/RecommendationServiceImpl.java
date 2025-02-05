@@ -14,6 +14,7 @@ import pro.sky.recommendation_service.repository.StatisticRepository;
 import pro.sky.recommendation_service.service.RecommendationService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static pro.sky.recommendation_service.domain.enums.TransactionName.DEPOSIT;
 import static pro.sky.recommendation_service.domain.enums.TransactionName.WITHDRAW;
@@ -43,6 +44,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод для вывода всех рекомендаций, актуальных для пользователя
+     *
      * @param user_id Идентификатор пользователя
      * @return Список всех рекомендаций, актуальных для данного пользователя
      */
@@ -54,15 +56,23 @@ public class RecommendationServiceImpl implements RecommendationService {
         Collection<DynamicRule> dynamicRules = dynamicRuleRepository.findAll();
         dynamicRules.stream()
                 .filter(dynamicRule -> checkDynamicRule(dynamicRule, user_id))
-                .peek(dynamicRule -> statisticRepository.incrCount(dynamicRule))
                 .forEach(validDynamicRules::add);
+
+        Collection<Statistic> statistics = statisticRepository.findAll();
+        statistics.stream()
+                .filter(statistic -> validDynamicRules.contains(statistic.getDynamicRule()))
+                .peek(Statistic::incrCount)
+                .collect(Collectors.toList());
+        statisticRepository.saveAll(statistics);
+
         return new ResponseForUser(user_id, validDynamicRules);
     }
 
     /**
      * Метод, проверяющий, актуально ли динамическое правило (рекомендация) для данного пользователя
+     *
      * @param dynamicRule Динамическое правило
-     * @param user_id Идентификатор пользователя
+     * @param user_id     Идентификатор пользователя
      * @return true или false
      */
     private Boolean checkDynamicRule(DynamicRule dynamicRule, UUID user_id) {
@@ -79,7 +89,8 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод, проверяющий актуальность условия (condition) из динамического правила для пользователя или параллельного условия (если есть)
-     * @param user_ID Идентификатор пользователя
+     *
+     * @param user_ID   Идентификатор пользователя
      * @param condition Условие из динамического правила
      * @return true или false
      */
@@ -97,7 +108,8 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод для перебора всех возможных типов запроса из условия
-     * @param user_ID Идентификатор пользователя
+     *
+     * @param user_ID   Идентификатор пользователя
      * @param condition Условие из динамического правила
      * @return true или false
      */
@@ -116,7 +128,8 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод-счётчик для проверки количества транзакций с определенным продуктом у пользователя для проверки запросов USER_OF и ACTIVE_USER_OF
-     * @param user_ID Идентификатор пользователя
+     *
+     * @param user_ID     Идентификатор пользователя
      * @param productType Тип продукта в условии
      * @return число транзакций с определенным продуктом (int)
      */
@@ -133,7 +146,8 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод для проверки типа запроса USER_OF в условии
-     * @param user_ID Идентификатор пользователя
+     *
+     * @param user_ID   Идентификатор пользователя
      * @param condition Условие
      * @return true или false
      */
@@ -145,7 +159,8 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод для проверки типа запроса ACTIVE_USER_OF в условии
-     * @param user_ID Идентификатор пользователя
+     *
+     * @param user_ID   Идентификатор пользователя
      * @param condition Условие
      * @return true или false
      */
@@ -154,9 +169,11 @@ public class RecommendationServiceImpl implements RecommendationService {
         boolean result = amount > 5;
         return condition.isNegate() ^ result;
     }
+
     /**
      * Метод для проверки типа запроса TRANSACTION_SUM_COMPARE в условии
-     * @param user_ID Идентификатор пользователя
+     *
+     * @param user_ID   Идентификатор пользователя
      * @param condition Условие
      * @return true или false
      */
@@ -173,9 +190,11 @@ public class RecommendationServiceImpl implements RecommendationService {
         boolean result = switchCompareType(amount, condition.getCompareValue(), condition);
         return condition.isNegate() ^ result;
     }
+
     /**
      * Метод для проверки типа запроса TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW в условии
-     * @param user_ID Идентификатор пользователя
+     *
+     * @param user_ID   Идентификатор пользователя
      * @param condition Условие
      * @return true или false
      */
@@ -198,8 +217,9 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод для перебора всех возможных операторов сравнения в запросах TRANSACTION_SUM_COMPARE и TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW
-     * @param a Первое число
-     * @param b Второе число
+     *
+     * @param a         Первое число
+     * @param b         Второе число
      * @param condition Условие
      * @return результат сравнения (true или false)
      */
@@ -218,6 +238,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     /**
      * Метод для получения всех транзакций пользователя
+     *
      * @param user_id Идентификатор пользователя
      * @return Список транзакций пользователя с типом продукта, видом транзакции (пополнение или трата) и суммой транзакции
      */

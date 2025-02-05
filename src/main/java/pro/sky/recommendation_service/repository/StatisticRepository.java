@@ -16,11 +16,4 @@ public interface StatisticRepository extends JpaRepository<Statistic, Long> {
 
     public void deleteByDynamicRule(DynamicRule dynamicRule);
 
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE Statistic " +
-            "SET counts = counts + 1 " +
-            "WHERE dynamicRule = ?1")
-    public void incrCount(DynamicRule dynamicRule);
-
 }

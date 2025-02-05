@@ -7,6 +7,7 @@ import pro.sky.recommendation_service.domain.DynamicRule;
 import pro.sky.recommendation_service.domain.Statistic;
 import pro.sky.recommendation_service.dto.StatisticObject;
 import pro.sky.recommendation_service.repository.StatisticRepository;
+import pro.sky.recommendation_service.service.StatisticService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class StatisticServiceImpl {
+public class StatisticServiceImpl implements StatisticService {
 
 
     private static final Logger log = LoggerFactory.getLogger(StatisticServiceImpl.class);
@@ -48,4 +49,11 @@ public class StatisticServiceImpl {
                 )
                 .collect(Collectors.toList());
     }
+
+    public void incrementCount(long id) {
+        log.info("increment count method was invoked");
+
+        statisticRepository.save(statisticRepository.findById(id).get().incrCount());
+    }
+
 }
