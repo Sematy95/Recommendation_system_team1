@@ -27,6 +27,12 @@ public class StatisticServiceImpl implements StatisticService {
         this.statisticRepository = statisticRepository;
     }
 
+    /**
+     * Метод для сохранения статистики
+     *
+     * @param dynamicRule   Динамическое правило
+     * @param count Счетчик
+     */
     public void addStat(DynamicRule dynamicRule, long count) {
         log.info("stat addition method was invoked");
 
@@ -34,12 +40,22 @@ public class StatisticServiceImpl implements StatisticService {
         statisticRepository.save(statistic);
     }
 
+    /**
+     * Метод для удаления статистики по идентификатору
+     *
+     * @param id   Идентификатор статистики
+     */
     public void deleteStat(long id) {
         log.info("stat deletion method was invoked");
 
         statisticRepository.deleteById(id);
     }
 
+    /**
+     * Метод для получения сохраненной статистики
+     *
+     * @return список сохраненной статистики
+     */
     public List<StatisticObject> getAllStats() {
         log.info("get all stats method was invoked");
 
@@ -50,6 +66,11 @@ public class StatisticServiceImpl implements StatisticService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Метод для инкрементирования счетчика
+     *
+     * @param id   Идентификатор статистики
+     */
     public void incrementCount(long id) {
         log.info("increment count method was invoked");
 
