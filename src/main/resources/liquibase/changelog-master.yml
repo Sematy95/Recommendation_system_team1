@@ -1,3 +1,14 @@
 databaseChangeLog:
+  - changeSet:
+      id: rule
+      author: dmitri
+      changes: rule
   - include:
       file: liquibase/scripts/rule.sql
+
+  - changeSet:
+      id: telegram-fields-init
+      author: tyutyunik
+      changes: telegram-fields-init
+  - include:
+      file: liquibase/scripts/10-telegrambot-init.sql

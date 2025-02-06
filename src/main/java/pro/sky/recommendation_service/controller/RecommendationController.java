@@ -35,7 +35,7 @@ public class RecommendationController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Рекомендация",
+                            description = "Recommendation",
                             content = @Content(
                                     array = @ArraySchema(
                                             schema = @Schema(implementation = RecommendationService.class)
