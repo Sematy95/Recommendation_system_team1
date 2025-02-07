@@ -32,6 +32,9 @@ public class ManagementServiceImpl implements ManagementService {
         this.xmlFile = new File("./pom.xml");
     }
 
+    /**
+     * Метод для очистки кеша данных
+     */
     @Override
     public void clearCaches() {
         log.info("clear caches method was invoked");
