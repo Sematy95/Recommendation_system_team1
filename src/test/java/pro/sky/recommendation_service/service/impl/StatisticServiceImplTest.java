@@ -10,6 +10,7 @@ import pro.sky.recommendation_service.domain.Condition;
 import pro.sky.recommendation_service.domain.DynamicRule;
 import pro.sky.recommendation_service.domain.Statistic;
 import pro.sky.recommendation_service.dto.StatisticObject;
+import pro.sky.recommendation_service.exception.StatisticNotFoundException;
 import pro.sky.recommendation_service.repository.StatisticRepository;
 import pro.sky.recommendation_service.service.StatisticService;
 
@@ -21,8 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.client.ExpectedCount.once;
@@ -40,7 +40,7 @@ public class StatisticServiceImplTest {
 
     @Test
     @DisplayName("Сохранение статистики")
-    public void addStat() {
+    public void shouldAddStatistic() {
         when(statisticRepository.save(any())).thenReturn(null);
 
         statisticService.addStat(new DynamicRule(), 0);
@@ -49,18 +49,31 @@ public class StatisticServiceImplTest {
     }
 
     @Test
-    @DisplayName("Удаление статистики")
-    public void deleteStat() {
+    @DisplayName("Удаление статистики - положительный тест")
+    public void shouldDeleteStatistic() {
         doNothing().when(statisticRepository).deleteById(any());
+        when(statisticRepository.existsById(anyLong())).thenReturn(true);
 
         statisticService.deleteStat(statistic.getId());
 
         verify(statisticRepository, times(1)).deleteById(any());
+        verify(statisticRepository, times(1)).existsById(anyLong());
+    }
+
+    @Test
+    @DisplayName("Удаление статистики - отрицательный тест")
+    public void shouldThrowExceptionWhenDeleteStatistic() {
+        when(statisticRepository.existsById(anyLong())).thenReturn(false);
+
+        assertThrows(StatisticNotFoundException.class, () -> statisticService.deleteStat(statistic.getId()));
+
+        verify(statisticRepository, times(0)).deleteById(any());
+        verify(statisticRepository, times(1)).existsById(anyLong());
     }
 
     @Test
     @DisplayName("Инкремент счетчика")
-    public void incrementCount() {
+    public void shouldIncrementCount() {
         when(statisticRepository.save(any())).thenReturn(null);
         when(statisticRepository.findById(anyLong())).thenReturn(Optional.of(statistic));
 

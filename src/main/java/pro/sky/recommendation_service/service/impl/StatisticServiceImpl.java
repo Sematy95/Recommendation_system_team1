@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pro.sky.recommendation_service.domain.DynamicRule;
 import pro.sky.recommendation_service.domain.Statistic;
 import pro.sky.recommendation_service.dto.StatisticObject;
+import pro.sky.recommendation_service.exception.StatisticNotFoundException;
 import pro.sky.recommendation_service.repository.StatisticRepository;
 import pro.sky.recommendation_service.service.StatisticService;
 
@@ -47,6 +48,11 @@ public class StatisticServiceImpl implements StatisticService {
      */
     public void deleteStat(long id) {
         log.info("stat deletion method was invoked");
+
+        if (!statisticRepository.existsById(id)) {
+            log.error("Statistic could not be found");
+            throw new StatisticNotFoundException(id);
+        }
 
         statisticRepository.deleteById(id);
     }
