@@ -3,16 +3,16 @@ package pro.sky.recommendation_service.domain;
 import java.util.Objects;
 
 public class Transaction {
-    private String transactionType;
     private String ProductType;
+    private String transactionType;
     private int amount;
 
     public Transaction() {
     }
 
-    public Transaction(String transactionType, String productType, int amount) {
-        this.transactionType = transactionType;
+    public Transaction(String productType, String transactionType, int amount) {
         ProductType = productType;
+        this.transactionType = transactionType;
         this.amount = amount;
     }
 

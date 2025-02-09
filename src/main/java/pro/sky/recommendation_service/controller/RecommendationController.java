@@ -1,11 +1,9 @@
 package pro.sky.recommendation_service.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.*;
+import pro.sky.recommendation_service.domain.ResponseForUser;
 import pro.sky.recommendation_service.domain.Transaction;
-import pro.sky.recommendation_service.dto.RecommendationObject;
-import pro.sky.recommendation_service.repository.RecommendationsRepository;
 import pro.sky.recommendation_service.service.RecommendationService;
 
 import java.util.List;
@@ -18,10 +16,19 @@ public class RecommendationController {
 
     public RecommendationController(RecommendationService recommendationService) {
         this.recommendationService = recommendationService;
+
     }
 
+    @Operation(summary = "list of all valid recommendations for user")
     @GetMapping("/recommendation/{user_id}")
-    public List<RecommendationObject> getRecommendation(@PathVariable("user_id") UUID id) {
+    public ResponseForUser getRecommendation(@PathVariable("user_id") UUID id) {
         return recommendationService.getRecommendations(id);
     }
+
+    @Operation(summary = "list of all user's transactions")
+    @GetMapping("/transaction/{user_id}")
+    public List<Transaction> getTransaction(@PathVariable("user_id") UUID id) {
+        return recommendationService.getTransaction(id);
+    }
+
 }
