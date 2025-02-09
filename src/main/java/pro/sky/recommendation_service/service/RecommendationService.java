@@ -11,5 +11,8 @@ public interface RecommendationService {
     @Cacheable(value = "recommendationCache")
     ResponseForUser getRecommendations(UUID user_id);
 
+    @Cacheable(value = "recommendationCache")
+    ResponseForUser getRecommendationsByUsername(String username);
+
     List<Transaction> getTransaction(UUID user_id);
 }

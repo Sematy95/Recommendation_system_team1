@@ -69,6 +69,20 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     /**
+     * Метод для вывода всех рекомендаций, актуальных для пользователя
+     *
+     * @param username Имя пользователя
+     * @return Список всех рекомендаций, актуальных для данного пользователя
+     */
+    @Cacheable(value = "recommendationCache")
+    @Override
+    public ResponseForUser getRecommendationsByUsername(String username) {
+        log.info("Was invoked method for getting recommendations by username: {}", username);
+        UUID user_id = recommendationsRepository.getUserIdByUserName(username);
+        return getRecommendations(user_id);
+    }
+
+    /**
      * Метод, проверяющий, актуально ли динамическое правило (рекомендация) для данного пользователя
      *
      * @param dynamicRule Динамическое правило
