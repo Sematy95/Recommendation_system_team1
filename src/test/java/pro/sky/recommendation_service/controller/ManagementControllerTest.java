@@ -20,6 +20,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +38,15 @@ class ManagementControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void clearCaches() {
+    void clearCaches() throws Exception {
+        doNothing().when(managementServiceImpl).clearCaches();
+
+        //test & check
+
+        mvc.perform(post("/management/clear-caches"))
+                .andExpect(status().isOk());
+
+        verify(managementServiceImpl,times(1)).clearCaches();
     }
 
     @Test
