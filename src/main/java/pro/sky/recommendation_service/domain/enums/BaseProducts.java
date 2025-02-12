@@ -1,7 +1,9 @@
 package pro.sky.recommendation_service.domain.enums;
 
+/**
+ * Enum representing the different messages of financial product.
+ */
 public enum BaseProducts {
-
     INVEST500_UUID("147f6a0f-3b91-413b-ab99-87f081d60d5a"),
     INVEST500_NAME("Invest 500"),
     INVEST500_TEXT("Откройте свой путь к успеху с индивидуальным инвестиционным счетом (ИИС) от нашего банка! " +
@@ -29,7 +31,6 @@ public enum BaseProducts {
             "Широкий выбор кредитных продуктов. Мы предлагаем кредиты на различные цели: покупку недвижимости, автомобиля, образование, лечение и многое другое." +
             "Не упустите возможность воспользоваться выгодными условиями кредитования от нашей компании!");
 
-
     private final String value;
 
     public String getValue() {
@@ -38,6 +39,5 @@ public enum BaseProducts {
 
     BaseProducts(String value) {
         this.value = value;
-
     }
 }

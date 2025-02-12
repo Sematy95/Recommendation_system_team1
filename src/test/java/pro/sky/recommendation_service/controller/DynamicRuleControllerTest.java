@@ -1,4 +1,5 @@
 package pro.sky.recommendation_service.controller;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import pro.sky.recommendation_service.domain.DynamicRule;
 import pro.sky.recommendation_service.service.impl.DynamicRuleServiceImpl;
 import pro.sky.recommendation_service.service.impl.StatisticServiceImpl;
-import java.util.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -24,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(DynamicRuleController.class)
 class DynamicRuleControllerTest {
-
     @Autowired
     private MockMvc mvc;
 
@@ -41,6 +46,7 @@ class DynamicRuleControllerTest {
     private final DynamicRule dynamicRule2 = new DynamicRule("name2", UUID.randomUUID(), "text2", null);
     private final DynamicRule dynamicRule3 = new DynamicRule("name3", UUID.randomUUID(), "text3", null);
     private final Collection<DynamicRule> dynamicRuleCollection = List.of(dynamicRule, dynamicRule2, dynamicRule3);
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -55,7 +61,7 @@ class DynamicRuleControllerTest {
 
         when(dynamicRuleService.addRule(dynamicRule)).thenReturn(dynamicRule);
 
-        //test & check
+        // test & check
         mockMvc.perform(post("/rule").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dynamicRule)))
                 .andExpect(status().isOk())
@@ -72,12 +78,11 @@ class DynamicRuleControllerTest {
         Long id = new Random().nextLong();
         doNothing().when(dynamicRuleService).deleteRule(id);
 
-        //test & check
+        // test & check
         mockMvc.perform(delete("/rule/{id}", id))
                 .andExpect(status().isNoContent());
 
         verify(dynamicRuleService, times(1)).deleteRule(any(Long.class));
-
     }
 
     @Test
@@ -85,7 +90,7 @@ class DynamicRuleControllerTest {
     void getAllRules() throws Exception {
         when(dynamicRuleService.getAllDynamicRules()).thenReturn(dynamicRuleCollection);
 
-        //test & check
+        // test & check
         mockMvc.perform(get("/rule"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists());

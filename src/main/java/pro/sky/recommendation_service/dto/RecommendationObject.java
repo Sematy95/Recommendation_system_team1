@@ -3,8 +3,11 @@ package pro.sky.recommendation_service.dto;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Represents a recommendation object with an ID, name, and descriptive text.
+ * This class is immutable, as its fields are final.
+ */
 public class RecommendationObject {
-
     private final UUID id;
     private final String name;
     private final String text;
@@ -32,7 +35,9 @@ public class RecommendationObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecommendationObject that = (RecommendationObject) o;
-        return id == that.id && Objects.equals(name, that.name) && Objects.equals(text, that.text);
+        return id == that.id &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(text, that.text);
     }
 
     @Override
@@ -49,5 +54,3 @@ public class RecommendationObject {
                 '}';
     }
 }
-
-

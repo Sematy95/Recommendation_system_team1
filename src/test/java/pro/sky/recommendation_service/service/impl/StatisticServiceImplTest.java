@@ -6,30 +6,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pro.sky.recommendation_service.domain.Condition;
 import pro.sky.recommendation_service.domain.DynamicRule;
 import pro.sky.recommendation_service.domain.Statistic;
-import pro.sky.recommendation_service.dto.StatisticObject;
 import pro.sky.recommendation_service.exception.StatisticNotFoundException;
 import pro.sky.recommendation_service.repository.StatisticRepository;
-import pro.sky.recommendation_service.service.StatisticService;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.ExpectedCount.once;
 
 @ExtendWith(MockitoExtension.class)
 public class StatisticServiceImplTest {
-
     @Mock
     private StatisticRepository statisticRepository;
 
@@ -84,5 +74,4 @@ public class StatisticServiceImplTest {
         verify(statisticRepository, times(1)).save(any());
         verify(statisticRepository, times(1)).findById(anyLong());
     }
-
 }

@@ -1,6 +1,5 @@
 package pro.sky.recommendation_service.service.impl;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,10 +12,12 @@ import pro.sky.recommendation_service.service.DynamicRuleService;
 
 import java.util.Collection;
 
-
+/**
+ * Service class for managing dynamic rules.
+ * This class provides methods for adding, deleting, and retrieving dynamic rules.
+ */
 @Service
 public class DynamicRuleServiceImpl implements DynamicRuleService {
-
     private final DynamicRuleRepository dynamicRuleRepository;
     private final StatisticRepository statisticRepository;
 
@@ -50,9 +51,8 @@ public class DynamicRuleServiceImpl implements DynamicRuleService {
             statisticRepository.deleteByDynamicRule(dynamicRuleForDelete);
             dynamicRuleRepository.delete(dynamicRuleForDelete);
             log.info("Was invoked method for removing dynamic rule with id={} ", dynamicRuleForDelete.getId());
-
         } catch (DynamicRuleNotFoundException e) {
-            log.error("Could not find dynamic rule with id=" + id, e);
+            log.error("Could not find dynamic rule with id={}", id, e);
             throw e;
         }
     }
@@ -66,6 +66,4 @@ public class DynamicRuleServiceImpl implements DynamicRuleService {
         log.info("Was invoked method for getting all dynamic rules");
         return dynamicRuleRepository.findAll();
     }
-
-
 }

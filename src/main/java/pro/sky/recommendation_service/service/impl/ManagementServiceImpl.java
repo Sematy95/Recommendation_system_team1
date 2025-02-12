@@ -1,7 +1,5 @@
 package pro.sky.recommendation_service.service.impl;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -19,9 +17,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Service class implementing the ManagementService interface.
+ * This class provides methods for clearing caches and retrieving project information.
+ */
 @Service
 public class ManagementServiceImpl implements ManagementService {
-
     private static final Logger log = LoggerFactory.getLogger(ManagementServiceImpl.class);
 
     private final CaffeineCacheManager cacheManager;
@@ -46,10 +47,25 @@ public class ManagementServiceImpl implements ManagementService {
     }
 
     /**
+     * @param parent  корневой элемент
+     * @param tagName корневой элемент
+     * @return Возврашает строку с требуемым контентом из элемента сгенерированного документа
+     */
+    private static String getElementValue(Element parent, String tagName) {
+        NodeList nodeList = parent.getElementsByTagName(tagName);
+        if (nodeList.getLength() > 0) {
+            Node node = nodeList.item(0);
+            return node.getTextContent();
+        }
+        return null;
+    }
+
+    /**
      * Метод для извлечения имени и версии проекта из файла pom.xml
+     *
      * @return Возвращает имя и версию проекта
-     * @throws IOException Ошибки неудачных/прерванных операций ввода-вывода
-     * @throws SAXException Ошибки или предупреждения, полученные либо из синтаксического анализатора XML, либо из приложения
+     * @throws IOException                  Ошибки неудачных/прерванных операций ввода-вывода
+     * @throws SAXException                 Ошибки или предупреждения, полученные либо из синтаксического анализатора XML, либо из приложения
      * @throws ParserConfigurationException Ошибки конфигурации
      */
     public String getInfo() throws IOException, SAXException, ParserConfigurationException {
@@ -67,20 +83,4 @@ public class ManagementServiceImpl implements ManagementService {
         str = "{\n\"name\": " + name + "\n" + "\"version\": " + version + "\n}";
         return str;
     }
-
-    /**
-     *
-     * @param parent корневой элемент
-     * @param tagName корневой элемент
-     * @return Возврашает строку с требуемым контентом из элемента сгенерированного документа
-     */
-    private static String getElementValue(Element parent, String tagName) {
-        NodeList nodeList = parent.getElementsByTagName(tagName);
-        if (nodeList.getLength() > 0) {
-            Node node = nodeList.item(0);
-            return node.getTextContent();
-        }
-        return null;
-    }
-
 }

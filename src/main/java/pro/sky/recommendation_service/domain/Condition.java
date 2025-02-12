@@ -9,10 +9,19 @@ import pro.sky.recommendation_service.domain.enums.TransactionName;
 
 import java.util.Objects;
 
+/**
+ * Represents a condition used in dynamic rule evaluation.
+ * This entity is stored in the "condition" table.
+ */
 @Entity
 @Table(name = "condition")
 public class Condition {
-
+    /**
+     * The unique identifier for the Condition entity.
+     * This field represents the primary key in the "condition" table of the database.
+     * It is automatically generated using a database sequence named "condition_seq".
+     * The {@code @JsonIgnore} annotation prevents this ID from being included in JSON responses.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "condition_seq")
     @SequenceGenerator(name = "condition_seq", allocationSize = 1)
@@ -27,10 +36,23 @@ public class Condition {
     private boolean negate;
     private Long parallelConditionId;
 
-
+    /**
+     * Default constructor for the Condition entity. Required by JPA.
+     */
     public Condition() {
     }
 
+    /**
+     * Constructs a new Condition object.
+     *
+     * @param query               The type of query.
+     * @param productType         The product type.
+     * @param transactionName     The transaction name.
+     * @param compareType         The comparison type.
+     * @param compareValue        The comparison value.
+     * @param negate              Whether the condition should be negated.
+     * @param parallelConditionId The ID of a parallel condition (if any).
+     */
     public Condition(QueryType query, ProductType productType, TransactionName transactionName, CompareType compareType, Integer compareValue, boolean negate, Long parallelConditionId) {
         this.query = query;
         this.productType = productType;
@@ -110,7 +132,13 @@ public class Condition {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Condition condition = (Condition) o;
-        return negate == condition.negate && query == condition.query && productType == condition.productType && transactionName == condition.transactionName && compareType == condition.compareType && Objects.equals(compareValue, condition.compareValue) && Objects.equals(parallelConditionId, condition.parallelConditionId);
+        return negate == condition.negate &&
+                query == condition.query &&
+                productType == condition.productType &&
+                transactionName == condition.transactionName &&
+                compareType == condition.compareType &&
+                Objects.equals(compareValue, condition.compareValue) &&
+                Objects.equals(parallelConditionId, condition.parallelConditionId);
     }
 
     @Override

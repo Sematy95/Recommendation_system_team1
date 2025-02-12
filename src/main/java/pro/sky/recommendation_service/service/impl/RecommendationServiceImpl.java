@@ -4,9 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import pro.sky.recommendation_service.domain.Condition;
-import pro.sky.recommendation_service.domain.enums.*;
 import pro.sky.recommendation_service.domain.*;
+import pro.sky.recommendation_service.domain.enums.ProductType;
 import pro.sky.recommendation_service.repository.ConditionsRepository;
 import pro.sky.recommendation_service.repository.DynamicRuleRepository;
 import pro.sky.recommendation_service.repository.RecommendationsRepository;
@@ -19,23 +18,21 @@ import java.util.stream.Collectors;
 import static pro.sky.recommendation_service.domain.enums.TransactionName.DEPOSIT;
 import static pro.sky.recommendation_service.domain.enums.TransactionName.WITHDRAW;
 
-
+/**
+ * Service class implementing the RecommendationService interface.
+ * This class provides methods for retrieving recommendations for users,
+ * both by user ID and username.  It also includes caching to improve performance.
+ */
 @Service
 public class RecommendationServiceImpl implements RecommendationService {
-
-
     private static final Logger log = LoggerFactory.getLogger(RecommendationServiceImpl.class);
-
 
     private final RecommendationsRepository recommendationsRepository;
     private final DynamicRuleRepository dynamicRuleRepository;
     private final ConditionsRepository conditionsRepository;
     private final StatisticRepository statisticRepository;
 
-    public RecommendationServiceImpl(RecommendationsRepository recommendationsRepository,
-                                     DynamicRuleRepository dynamicRuleRepository,
-                                     ConditionsRepository conditionsRepository,
-                                     StatisticRepository statisticRepository) {
+    public RecommendationServiceImpl(RecommendationsRepository recommendationsRepository, DynamicRuleRepository dynamicRuleRepository, ConditionsRepository conditionsRepository, StatisticRepository statisticRepository) {
         this.recommendationsRepository = recommendationsRepository;
         this.dynamicRuleRepository = dynamicRuleRepository;
         this.conditionsRepository = conditionsRepository;
@@ -54,15 +51,10 @@ public class RecommendationServiceImpl implements RecommendationService {
         log.info("Was invoked method for getting recommendations by user_id: {}", user_id);
         Collection<DynamicRule> validDynamicRules = new ArrayList<>();
         Collection<DynamicRule> dynamicRules = dynamicRuleRepository.findAll();
-        dynamicRules.stream()
-                .filter(dynamicRule -> checkDynamicRule(dynamicRule, user_id))
-                .forEach(validDynamicRules::add);
+        dynamicRules.stream().filter(dynamicRule -> checkDynamicRule(dynamicRule, user_id)).forEach(validDynamicRules::add);
 
         Collection<Statistic> statistics = statisticRepository.findAll();
-        statistics.stream()
-                .filter(statistic -> validDynamicRules.contains(statistic.getDynamicRule()))
-                .peek(Statistic::incrCount)
-                .collect(Collectors.toList());
+        statistics.stream().filter(statistic -> validDynamicRules.contains(statistic.getDynamicRule())).peek(Statistic::incrCount).collect(Collectors.toList());
         statisticRepository.saveAll(statistics);
 
         return new ResponseForUser(user_id, validDynamicRules);
@@ -196,8 +188,7 @@ public class RecommendationServiceImpl implements RecommendationService {
         int amount = 0;
 
         for (Transaction transaction : transactions) {
-            if (transaction.getProductType().equals(condition.getProductType().toString())
-                    && transaction.getTransactionType().equals(condition.getTransactionName().toString())) {
+            if (transaction.getProductType().equals(condition.getProductType().toString()) && transaction.getTransactionType().equals(condition.getTransactionName().toString())) {
                 amount += transaction.getAmount();
             }
         }

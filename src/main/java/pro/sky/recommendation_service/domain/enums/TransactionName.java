@@ -1,7 +1,9 @@
 package pro.sky.recommendation_service.domain.enums;
 
+/**
+ * Enum representing the different names or types of transactions.
+ */
 public enum TransactionName {
-
     WITHDRAW("WITHDRAW"),
     DEPOSIT("DEPOSIT");
 
@@ -13,6 +15,5 @@ public enum TransactionName {
 
     TransactionName(String value) {
         this.value = value;
-
     }
 }

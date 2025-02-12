@@ -9,15 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.xml.sax.SAXException;
-import pro.sky.recommendation_service.service.impl.DynamicRuleServiceImpl;
 import pro.sky.recommendation_service.service.impl.ManagementServiceImpl;
-import pro.sky.recommendation_service.service.impl.StatisticServiceImpl;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ManagementController.class)
 class ManagementControllerTest {
-
     @Autowired
     private MockMvc mvc;
 
@@ -38,11 +30,11 @@ class ManagementControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @DisplayName("Clear cache")
     void clearCaches() throws Exception {
         doNothing().when(managementServiceImpl).clearCaches();
 
-        //test & check
-
+        // test & check
         mvc.perform(post("/management/clear-caches"))
                 .andExpect(status().isOk());
 
@@ -55,8 +47,7 @@ class ManagementControllerTest {
 
         when(managementServiceImpl.getInfo()).thenReturn("Инфо");
 
-        //test & check
-
+        // test & check
         mvc.perform(get("/management/info"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists());

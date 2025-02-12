@@ -10,16 +10,16 @@ import pro.sky.recommendation_service.exception.StatisticNotFoundException;
 import pro.sky.recommendation_service.repository.StatisticRepository;
 import pro.sky.recommendation_service.service.StatisticService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service class implementing the StatisticService interface.
+ * This class provides methods for managing Statistic entities, including adding,
+ * deleting, retrieving, and incrementing the count.
+ */
 @Service
 public class StatisticServiceImpl implements StatisticService {
-
-
     private static final Logger log = LoggerFactory.getLogger(StatisticServiceImpl.class);
 
     private final StatisticRepository statisticRepository;
@@ -36,7 +36,6 @@ public class StatisticServiceImpl implements StatisticService {
      */
     public void addStat(DynamicRule dynamicRule, long count) {
         log.info("stat addition method was invoked");
-
         Statistic statistic = new Statistic(dynamicRule, count);
         statisticRepository.save(statistic);
     }
@@ -48,7 +47,6 @@ public class StatisticServiceImpl implements StatisticService {
      */
     public void deleteStat(long id) {
         log.info("stat deletion method was invoked");
-
         if (!statisticRepository.existsById(id)) {
             log.error("Statistic could not be found");
             throw new StatisticNotFoundException(id);
@@ -64,7 +62,6 @@ public class StatisticServiceImpl implements StatisticService {
      */
     public List<StatisticObject> getAllStats() {
         log.info("get all stats method was invoked");
-
         return statisticRepository.findAll().stream()
                 .map(statistic ->
                     new StatisticObject(statistic.getDynamicRule().getId(), statistic.getCount())
@@ -79,8 +76,6 @@ public class StatisticServiceImpl implements StatisticService {
      */
     public void incrementCount(long id) {
         log.info("increment count method was invoked");
-
         statisticRepository.save(statisticRepository.findById(id).get().incrCount());
     }
-
 }

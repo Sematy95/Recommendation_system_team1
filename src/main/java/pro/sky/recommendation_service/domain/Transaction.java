@@ -2,16 +2,30 @@ package pro.sky.recommendation_service.domain;
 
 import java.util.Objects;
 
+/**
+ * Represents a transaction with a type, product type, and amount.
+ */
+// todo #Entity may have been missed
 public class Transaction {
     private String ProductType;
     private String transactionType;
     private int amount;
 
+    /**
+     * Empty constructor for the Transaction class. Needed for other frameworks.
+     */
     public Transaction() {
     }
 
+    /**
+     * Constructs a new Transaction object.
+     *
+     * @param transactionType The type of the transaction.
+     * @param productType     The type of product involved in the transaction.
+     * @param amount          The amount of the transaction.
+     */
     public Transaction(String productType, String transactionType, int amount) {
-        ProductType = productType;
+        ProductType = productType;  // todo missed this, refactor like productType
         this.transactionType = transactionType;
         this.amount = amount;
     }
@@ -45,7 +59,9 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(transactionType, that.transactionType) && Objects.equals(ProductType, that.ProductType) && Objects.equals(amount, that.amount);
+        return Objects.equals(transactionType, that.transactionType) &&
+                Objects.equals(ProductType, that.ProductType) &&
+                Objects.equals(amount, that.amount);
     }
 
     @Override

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for setting up exchanging with telegram bot.
+ */
 @Configuration
 public class TelegramBotConfiguration {
     /**
@@ -31,4 +34,3 @@ public class TelegramBotConfiguration {
         return bot;
     }
 }
-
