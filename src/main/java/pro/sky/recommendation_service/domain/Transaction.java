@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Represents a transaction with a type, product type, and amount.
  */
-// todo #Entity may have been missed
+
 public class Transaction {
     private String ProductType;
     private String transactionType;
@@ -25,7 +25,7 @@ public class Transaction {
      * @param amount          The amount of the transaction.
      */
     public Transaction(String productType, String transactionType, int amount) {
-        ProductType = productType;  // todo missed this, refactor like productType
+        this.ProductType = productType;
         this.transactionType = transactionType;
         this.amount = amount;
     }
