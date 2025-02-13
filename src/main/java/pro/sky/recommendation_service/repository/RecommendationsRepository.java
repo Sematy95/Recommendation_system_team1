@@ -13,7 +13,6 @@ import java.util.UUID;
  * This class uses JdbcTemplate to interact with the database.
  */
 @Repository
-// todo interface instead of class may have been implied
 public class RecommendationsRepository {
     private final JdbcTemplate jdbcTemplate;
 

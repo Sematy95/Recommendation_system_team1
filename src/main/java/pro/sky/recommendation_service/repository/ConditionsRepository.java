@@ -1,6 +1,7 @@
 package pro.sky.recommendation_service.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import pro.sky.recommendation_service.domain.Condition;
 
 /**
@@ -8,6 +9,6 @@ import pro.sky.recommendation_service.domain.Condition;
  * This interface extends JpaRepository, providing standard CRUD operations
  * for Condition objects.
  */
-// todo @Repository may have been missed
+@Repository
 public interface ConditionsRepository extends JpaRepository<Condition, Long> {
 }
