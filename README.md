@@ -48,8 +48,12 @@ com.github.pengrad: Библиотека Java, обеспечивающая уд
 `git clone https://github.com/Sematy95/Recommendation_system_team1`
 
 * С помощью IntelliJ IDEA (Project from VCS)
-3. Открыть проект через IntelliJ IDEA
-4. Изменить параметры подключения к базе данных и токен telegram bot
+3. Установить зависимости
+A. Открыть проект через IntelliJ IDEA и перейте Maven -> Sync 
+B. Открыть консоль:
+```sh```
+```mvn clean install```
+4. Изменить параметры подключения к базе данных и токен telegram bot (application.properties)
 
 ```spring.datasource.url= jdbc:postgresql://[host]:[port]/[db_name]```
 
@@ -58,6 +62,12 @@ com.github.pengrad: Библиотека Java, обеспечивающая уд
 ```spring.datasource.password=[db_password]```
 
 ```telegram.bot.token=[telegramBot_token]```
+
+5. Запустить приложение
+A. Intellij IDEA: run
+B Открыть консоль:
+```sh```
+```mvn spring-boot:run```
 
 # Подробности
 Для просмотра документации откройте wiki
